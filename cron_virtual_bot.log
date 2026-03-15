@@ -1,0 +1,28 @@
+/Users/onoakihiro/Desktop/botter/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+======================================================================
+🤖 バーチャル自動売買(フォワードテスト) BOT 起動
+======================================================================
+✅ 過去のログを読み込みました (開始資金: 996,098円)
+
+[引け後処理] 本日までの相場データを取得中...
+
+📊 今日の対象銘柄(過去1ヶ月の負け組): トヨタ自動車, 三菱UFJ, ソフトバンクG, キーエンス, 東エレク
+
+📈 本日(2026-03-04)の仮想損益: +0円
+💰 最新の仮想総資金: 996,098円
+✅ `forward_test_log.csv` に本日の結果を記録しました。明日もプログラムを実行してください！
+/Users/onoakihiro/Desktop/botter/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+======================================================================
+🤖 バーチャル自動売買(フォワードテスト) BOT 起動
+======================================================================
+✅ 過去のログを読み込みました (開始資金: 996,098円)
+
+[引け後処理] 本日までの相場データを取得中...
+
+📊 今日の対象銘柄(過去1ヶ月の負け組): ホンダ, 丸紅, 三菱商事, ニデック, トヨタ自動車
+
+📈 本日(2026-03-05)の仮想損益: -4,678円
+💰 最新の仮想総資金: 991,420円
+✅ `forward_test_log.csv` に本日の結果を記録しました。明日もプログラムを実行してください！
