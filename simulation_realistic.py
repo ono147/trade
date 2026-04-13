@@ -15,6 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import time
+import argparse
 
 EARNINGS_CACHE_FILE = 'earnings_cache.json'
 
@@ -59,10 +60,11 @@ def get_earnings_tickers(target_date_str: str) -> list:
 
 def run_daily_selection(df: pd.DataFrame) -> float:
     """
-    15分足データを用いて、直近で「GC後のだまし（損失を出すGC）」が起きていないかを評価する。
-    - 過去10日分（約260本）の15分足の終値を用いて、EMA5とEMA15のGCからDCまでの仮想トレードを実行。
-    - 1度でも損失（決済価格 < 買値）を出しただましGCがあれば、スコアを0.0にする。
-    - すべての仮想トレードが利益で終わった銘柄のみ、その利益率の合計をスコアとして返す。
+    15分足データを用いて、直近のEMA5/EMA15のGC→DC仮想トレード成績から銘柄スコアを返す。
+    - 直近最大10日分（約260本）の15分足終値で、GCで買い→DCで売りの仮想トレードを複数回実行。
+    - 大きなだましGC（GC→DCで損失率が-1.0%を下回る）が1回でもあれば「失格」として -inf を返す。
+    - GCが一度も発生しない場合は 0.0 を返す。
+    - 失格でなければ、仮想トレードの損益率（小さな損益も含む）の合計をスコアとして返す。
     """
     # 15分足は1日約26本。最低5日分(約130本)は必要
     if len(df) < 130: return 0.0 
@@ -110,10 +112,9 @@ def run_daily_selection(df: pd.DataFrame) -> float:
             exit_price = float(c)
             trade_return = (exit_price - entry_price) / entry_price
             
-            # 大きく損失を出した「だましGC」（-1.0%より大きい下落率）があれば即座に失格とする
-            # 許容度を緩和(-0.5% -> -1.0%)して監視対象を増やし、取引回数を増やす
+            # 大きなだましGC（-1.0%超の損失）があれば、ランキングに乗らないよう失格扱い
             if trade_return < -0.010:
-                return 0.0
+                return -np.inf
                 
             total_profit_pct += trade_return
             
@@ -128,13 +129,19 @@ def run_daily_selection(df: pd.DataFrame) -> float:
         
         # 含み損が-1.0%を下回る進行形のGCがあれば、だましのリスクが高いので失格
         if unrealized_return < -0.010:
-            return 0.0
+            return -np.inf
             
         total_profit_pct += unrealized_return
         
     return float(total_profit_pct)
 
-def run_all_virtual_trades(intra_data: dict, target_stocks: list, current_cash: float, target_date: str):
+def run_all_virtual_trades(
+    intra_data: dict,
+    target_stocks: list,
+    current_cash: float,
+    target_date: str,
+    volume_surge_mult: float = 1.2,
+):
     intra_ready = {}
     
     for sym_code, _, _ in target_stocks:
@@ -243,12 +250,14 @@ def run_all_virtual_trades(intra_data: dict, target_stocks: list, current_cash: 
             
             is_golden_cross = (prev_ema5 <= prev_ema15) and (curr_ema5 > curr_ema15)
             
-            # 出来高急増チェック: 直近バーの出来高が20本平均の1.2倍以上
+            # 出来高急増チェック: 直近バーの出来高が20本平均の volume_surge_mult 倍以上
             curr_vol = df['Volume'].iloc[idx]
             if isinstance(curr_vol, pd.Series): curr_vol = curr_vol.iloc[0]
             vol_ma = df['vol_ma20'].iloc[idx]
             if isinstance(vol_ma, pd.Series): vol_ma = vol_ma.iloc[0]
-            is_volume_surge = pd.notna(vol_ma) and vol_ma > 0 and (float(curr_vol) >= float(vol_ma) * 1.2)
+            is_volume_surge = pd.notna(vol_ma) and vol_ma > 0 and (
+                float(curr_vol) >= float(vol_ma) * volume_surge_mult
+            )
             
             if is_golden_cross and is_volume_surge:
                 qty = int(available_cash // (c * 100)) * 100
@@ -259,86 +268,136 @@ def run_all_virtual_trades(intra_data: dict, target_stocks: list, current_cash: 
     return daily_profit, trade_logs
 
 
-def main():
-    INITIAL_CASH = 1_000_000
-    print("=" * 70)
-    print("💰 単元株制約・値嵩株除外・だましGC排除(15分損失-1.0%まで)・出来高1.3倍・80銘柄監視 リアルシミュレーション")
-    print("=" * 70)
-
+def load_market_data():
     data_15m, intra_data = {}, {}
     symbols = [s[0] for s in NIKKEI225]
     print("データを一括取得中 (15分足)...")
     data_15m_raw = yf.download(" ".join(symbols), period="60d", interval="15m", group_by="ticker", auto_adjust=True, progress=False, threads=True)
     print("データを一括取得中 (5分足)...")
     intra_data_raw = yf.download(" ".join(symbols), period="60d", interval="5m", group_by="ticker", auto_adjust=True, progress=False, threads=True)
-    
+
     for sym in symbols:
         try:
             d15 = data_15m_raw[sym].copy().dropna()
             if d15.index.tz is not None: d15.index = d15.index.tz_convert('Asia/Tokyo').tz_localize(None)
             data_15m[sym] = d15
         except: data_15m[sym] = pd.DataFrame()
-        
+
         try:
             d5 = intra_data_raw[sym].copy().dropna()
             if d5.index.tz is not None: d5.index = d5.index.tz_convert('Asia/Tokyo').tz_localize(None)
             intra_data[sym] = d5
         except: intra_data[sym] = pd.DataFrame()
 
-    # 共通のテスト対象日を特定
     all_dates = set()
     for df in data_15m.values():
         if not df.empty:
             all_dates.update(df.index.strftime('%Y-%m-%d'))
     common_dates = sorted(list(all_dates))
-            
-    test_dates = common_dates[10:] if len(common_dates) > 10 else [] # 最初の10日は判定ウォームアップ用
-    
+    test_dates = common_dates[10:] if len(common_dates) > 10 else []
+    return data_15m, intra_data, test_dates
+
+
+def run_full_backtest(data_15m: dict, intra_data: dict, test_dates: list, volume_surge_mult: float, print_daily: bool = True):
+    INITIAL_CASH = 1_000_000
     current_cash = INITIAL_CASH
-    total_profit = 0
-    results = []
+    total_profit = 0.0
     all_trade_logs = []
-    
-    print("\n[Step 2] 実運用シミュレーションを開始...")
+
+    if print_daily:
+        print("\n[Step 2] 実運用シミュレーションを開始...")
     for target_date in test_dates:
-        # 当日以前のデータで戦略適用 (当日の終値は見ないように、target_date未満でスライス)
         earnings_today = get_earnings_tickers(target_date)
         symbol_scores = []
         for sym_code, sym_name in NIKKEI225:
-            # 決算日フィルター: 当日（target_date）がその銘柄の決算予定日ならスキップ（アプローチ2）
             if sym_code in earnings_today:
                 continue
-                
+
             d_df = data_15m.get(sym_code, pd.DataFrame())
             if d_df.empty: continue
-            
-            # 日付文字列での比較でtarget_date未満のデータを取得
+
             d_df_prev = d_df[d_df.index.strftime('%Y-%m-%d') < target_date]
             if len(d_df_prev) < 130: continue
-            
+
             last_close = d_df_prev['Close'].iloc[-1]
             if isinstance(last_close, pd.Series): last_close = last_close.iloc[0]
             if last_close >= 9000:
                 continue
-                
+
             score = run_daily_selection(d_df_prev)
             symbol_scores.append((sym_code, score, sym_name))
-            
-        symbol_scores.sort(key=lambda x: x[1], reverse=True) # 降順（上昇率が高い順）
-        target_stocks = symbol_scores  # 上位80銘柄を監視（45から緩和）
-        
-        daily_profit, daily_logs = run_all_virtual_trades(intra_data, target_stocks, current_cash, target_date)
+
+        symbol_scores.sort(key=lambda x: x[1], reverse=True)
+        target_stocks = symbol_scores[:80]
+
+        daily_profit, daily_logs = run_all_virtual_trades(
+            intra_data, target_stocks, current_cash, target_date, volume_surge_mult
+        )
         current_cash += daily_profit
         total_profit += daily_profit
-        
+
         symbol_map = {s[0]: s[2] for s in target_stocks}
         for log in daily_logs:
             log['date'] = target_date
             log['name'] = symbol_map.get(log['symbol'], log['symbol'])
             all_trade_logs.append(log)
-        
-        t_names = ", ".join([s[2] for s in target_stocks])
-        print(f"[{target_date}] 損益: {daily_profit:+7,.0f} 円 | 資金: {current_cash:>10,.0f} 円 | 対象: {t_names}")
+
+        if print_daily:
+            t_names = ", ".join([s[2] for s in target_stocks])
+            print(f"[{target_date}] 損益: {daily_profit:+7,.0f} 円 | 資金: {current_cash:>10,.0f} 円 | 対象: {t_names}")
+
+    return total_profit, current_cash, all_trade_logs
+
+
+def main():
+    parser = argparse.ArgumentParser(description="NIKKEI225 リアルシミュレーション")
+    parser.add_argument(
+        "--volume-mult",
+        type=float,
+        default=1.2,
+        help="出来高が20本平均の何倍以上でエントリーするか（既定 1.2）",
+    )
+    parser.add_argument(
+        "--sweep-vol",
+        action="store_true",
+        help="1.1, 1.15, 1.2, 1.25 の4通りで連続検証（データ取得は1回のみ）",
+    )
+    args = parser.parse_args()
+
+    INITIAL_CASH = 1_000_000
+    print("=" * 70)
+    print("💰 単元株制約・値嵩株除外・だましGC排除(15分損失-1.0%まで)・80銘柄監視 リアルシミュレーション")
+    print("=" * 70)
+
+    data_15m, intra_data, test_dates = load_market_data()
+
+    if args.sweep_vol:
+        sweep_mults = [1.1, 1.15, 1.2, 1.25]
+        print(f"\n[出来高倍率スイープ] {sweep_mults} （データ取得1回・日次ログ省略）\n")
+        rows = []
+        for m in sweep_mults:
+            tp, fc, logs = run_full_backtest(data_15m, intra_data, test_dates, m, print_daily=False)
+            n_trades = len(logs)
+            ret_pct = (fc - INITIAL_CASH) / INITIAL_CASH * 100.0
+            rows.append((m, tp, fc, n_trades, ret_pct))
+            print(f"  出来高×{m:.2f} 完了 | 合計損益 {tp:+,.0f} 円 | 最終資金 {fc:,.0f} 円 | 約定数 {n_trades}")
+
+        print("\n" + "=" * 70)
+        print(" 出来高条件 比較サマリー（同一データ・同一期間）")
+        print("=" * 70)
+        print(f"  {'出来高倍率':>10} | {'合計損益(円)':>14} | {'最終資金(円)':>16} | {'約定数':>8} | {'リターン%':>10}")
+        print("  " + "-" * 66)
+        for m, tp, fc, n_trades, ret_pct in rows:
+            print(f"  {m:>10.2f} | {tp:>+14,.0f} | {fc:>16,.0f} | {n_trades:>8} | {ret_pct:>+9.2f}%")
+        print("=" * 70)
+        return
+
+    vm = args.volume_mult
+    print(f"\n出来高条件: 20本平均の {vm} 倍以上でエントリー\n")
+
+    total_profit, current_cash, all_trade_logs = run_full_backtest(
+        data_15m, intra_data, test_dates, vm, print_daily=True
+    )
 
     print("\n======================================================================")
     print(" 📜 詳細な売買履歴")
@@ -350,11 +409,12 @@ def main():
               f"{log['name'][:8]:<8} | {log['qty']:>5}株 | "
               f"買 {log['entry_price']:>6.1f} -> 売 {log['exit_price']:>6.1f} | "
               f"損益: {sign}{pnl:>7,.0f} 円 ({log['reason']})")
-        
+
     print("\n======================================================================")
     print(f"  合計損益: {total_profit:+10,.0f} 円")
     print(f"  最終資金: {current_cash:,.0f} 円")
     print("======================================================================")
+
 
 if __name__ == '__main__':
     main()
