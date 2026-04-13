@@ -31,6 +31,30 @@ def normalize_tz_index(idx: pd.DatetimeIndex) -> pd.DatetimeIndex:
     return idx
 
 
+def download_with_retry(max_retries: int = 3, retry_wait_sec: float = 1.5, **download_kwargs) -> pd.DataFrame:
+    """yfinance download を失敗時に最大 max_retries 回まで再試行する。"""
+    last_error = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            data = yf.download(**download_kwargs)
+            if data is not None and not data.empty:
+                return data
+            last_error = RuntimeError("empty data")
+        except Exception as e:
+            last_error = e
+
+        if attempt < max_retries:
+            wait_sec = retry_wait_sec * attempt
+            print(
+                f"取得失敗のため再試行します ({attempt}/{max_retries}): "
+                f"{download_kwargs.get('interval', 'n/a')} wait={wait_sec:.1f}s"
+            )
+            time.sleep(wait_sec)
+
+    print(f"最終的に取得失敗: interval={download_kwargs.get('interval', 'n/a')} err={last_error}")
+    return pd.DataFrame()
+
+
 class SbiClient:
     def __init__(self, base_url: str, version: str, user_id: str, password: str, trade_password: str) -> None:
         self.base_url = base_url.rstrip("/")
@@ -90,8 +114,8 @@ class SbiClient:
 
 def select_target_stocks(target_date: str, top_n: int, enable_earnings_filter: bool) -> List[Tuple[str, float, str]]:
     symbols = [s[0] for s in NIKKEI225]
-    raw = yf.download(
-        " ".join(symbols),
+    raw = download_with_retry(
+        tickers=" ".join(symbols),
         period="12d",
         interval="15m",
         group_by="ticker",

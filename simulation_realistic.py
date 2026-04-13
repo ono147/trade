@@ -19,6 +19,56 @@ import argparse
 
 EARNINGS_CACHE_FILE = 'earnings_cache.json'
 
+
+def download_with_retry(max_retries: int = 3, retry_wait_sec: float = 1.5, **download_kwargs) -> pd.DataFrame:
+    """yfinance download を失敗時に最大 max_retries 回まで再試行する。"""
+    last_error = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            data = yf.download(**download_kwargs)
+            if data is not None and not data.empty:
+                return data
+            last_error = RuntimeError("empty data")
+        except Exception as e:
+            last_error = e
+
+        if attempt < max_retries:
+            wait_sec = retry_wait_sec * attempt
+            print(
+                f"取得失敗のため再試行します ({attempt}/{max_retries}): "
+                f"{download_kwargs.get('interval', 'n/a')} wait={wait_sec:.1f}s"
+            )
+            time.sleep(wait_sec)
+
+    print(f"最終的に取得失敗: interval={download_kwargs.get('interval', 'n/a')} err={last_error}")
+    return pd.DataFrame()
+
+
+def extract_symbol_frame(raw_data: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """一括取得データから銘柄DataFrameを安全に取り出す。"""
+    if raw_data is None or raw_data.empty:
+        return pd.DataFrame()
+    try:
+        df = raw_data[symbol].copy().dropna()
+        return df if not df.empty else pd.DataFrame()
+    except Exception:
+        return pd.DataFrame()
+
+
+def fetch_single_symbol(symbol: str, interval: str) -> pd.DataFrame:
+    """銘柄単体で再取得し、失敗時は空DataFrameを返す。"""
+    single = download_with_retry(
+        tickers=symbol,
+        period="60d",
+        interval=interval,
+        auto_adjust=True,
+        progress=False,
+        threads=False,
+    )
+    if single is None or single.empty:
+        return pd.DataFrame()
+    return single.dropna()
+
 def get_earnings_tickers(target_date_str: str) -> list:
     """外部サイトから当日決算発表を行う銘柄リストを自動取得しキャッシュする"""
     cache = {}
@@ -272,22 +322,56 @@ def load_market_data():
     data_15m, intra_data = {}, {}
     symbols = [s[0] for s in NIKKEI225]
     print("データを一括取得中 (15分足)...")
-    data_15m_raw = yf.download(" ".join(symbols), period="60d", interval="15m", group_by="ticker", auto_adjust=True, progress=False, threads=True)
+    data_15m_raw = download_with_retry(
+        tickers=" ".join(symbols),
+        period="60d",
+        interval="15m",
+        group_by="ticker",
+        auto_adjust=True,
+        progress=False,
+        threads=True,
+    )
     print("データを一括取得中 (5分足)...")
-    intra_data_raw = yf.download(" ".join(symbols), period="60d", interval="5m", group_by="ticker", auto_adjust=True, progress=False, threads=True)
+    intra_data_raw = download_with_retry(
+        tickers=" ".join(symbols),
+        period="60d",
+        interval="5m",
+        group_by="ticker",
+        auto_adjust=True,
+        progress=False,
+        threads=True,
+    )
+
+    recovered_15m = 0
+    recovered_5m = 0
+    failed_15m = []
+    failed_5m = []
 
     for sym in symbols:
-        try:
-            d15 = data_15m_raw[sym].copy().dropna()
-            if d15.index.tz is not None: d15.index = d15.index.tz_convert('Asia/Tokyo').tz_localize(None)
-            data_15m[sym] = d15
-        except: data_15m[sym] = pd.DataFrame()
+        d15 = extract_symbol_frame(data_15m_raw, sym)
+        if d15.empty:
+            d15 = fetch_single_symbol(sym, "15m")
+            if not d15.empty:
+                recovered_15m += 1
+            else:
+                failed_15m.append(sym)
+        if not d15.empty and d15.index.tz is not None:
+            d15.index = d15.index.tz_convert('Asia/Tokyo').tz_localize(None)
+        data_15m[sym] = d15
 
-        try:
-            d5 = intra_data_raw[sym].copy().dropna()
-            if d5.index.tz is not None: d5.index = d5.index.tz_convert('Asia/Tokyo').tz_localize(None)
-            intra_data[sym] = d5
-        except: intra_data[sym] = pd.DataFrame()
+        d5 = extract_symbol_frame(intra_data_raw, sym)
+        if d5.empty:
+            d5 = fetch_single_symbol(sym, "5m")
+            if not d5.empty:
+                recovered_5m += 1
+            else:
+                failed_5m.append(sym)
+        if not d5.empty and d5.index.tz is not None:
+            d5.index = d5.index.tz_convert('Asia/Tokyo').tz_localize(None)
+        intra_data[sym] = d5
+
+    print(f"個別再取得: 15分足 {recovered_15m} 銘柄回復 / 5分足 {recovered_5m} 銘柄回復")
+    print(f"最終取得失敗: 15分足 {len(failed_15m)} 銘柄 / 5分足 {len(failed_5m)} 銘柄")
 
     all_dates = set()
     for df in data_15m.values():
