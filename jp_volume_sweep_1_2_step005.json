@@ -1,0 +1,151 @@
+{
+  "rows": [
+    {
+      "mult": 1.0,
+      "total_profit": 13950,
+      "final_cash": 1013950,
+      "trades": 294,
+      "return_pct": 1.39
+    },
+    {
+      "mult": 1.05,
+      "total_profit": -18107,
+      "final_cash": 981893,
+      "trades": 288,
+      "return_pct": -1.81
+    },
+    {
+      "mult": 1.1,
+      "total_profit": -34247,
+      "final_cash": 965753,
+      "trades": 272,
+      "return_pct": -3.42
+    },
+    {
+      "mult": 1.15,
+      "total_profit": -22247,
+      "final_cash": 977753,
+      "trades": 253,
+      "return_pct": -2.22
+    },
+    {
+      "mult": 1.2,
+      "total_profit": 14213,
+      "final_cash": 1014213,
+      "trades": 230,
+      "return_pct": 1.42
+    },
+    {
+      "mult": 1.25,
+      "total_profit": 93513,
+      "final_cash": 1093513,
+      "trades": 227,
+      "return_pct": 9.35
+    },
+    {
+      "mult": 1.3,
+      "total_profit": 102863,
+      "final_cash": 1102863,
+      "trades": 212,
+      "return_pct": 10.29
+    },
+    {
+      "mult": 1.35,
+      "total_profit": 104933,
+      "final_cash": 1104933,
+      "trades": 213,
+      "return_pct": 10.49
+    },
+    {
+      "mult": 1.4,
+      "total_profit": 81763,
+      "final_cash": 1081763,
+      "trades": 214,
+      "return_pct": 8.18
+    },
+    {
+      "mult": 1.45,
+      "total_profit": 45283,
+      "final_cash": 1045283,
+      "trades": 200,
+      "return_pct": 4.53
+    },
+    {
+      "mult": 1.5,
+      "total_profit": 23293,
+      "final_cash": 1023293,
+      "trades": 198,
+      "return_pct": 2.33
+    },
+    {
+      "mult": 1.55,
+      "total_profit": 3873,
+      "final_cash": 1003873,
+      "trades": 185,
+      "return_pct": 0.39
+    },
+    {
+      "mult": 1.6,
+      "total_profit": 9533,
+      "final_cash": 1009533,
+      "trades": 182,
+      "return_pct": 0.95
+    },
+    {
+      "mult": 1.65,
+      "total_profit": 10863,
+      "final_cash": 1010863,
+      "trades": 175,
+      "return_pct": 1.09
+    },
+    {
+      "mult": 1.7,
+      "total_profit": 473,
+      "final_cash": 1000473,
+      "trades": 171,
+      "return_pct": 0.05
+    },
+    {
+      "mult": 1.75,
+      "total_profit": 5693,
+      "final_cash": 1005693,
+      "trades": 165,
+      "return_pct": 0.57
+    },
+    {
+      "mult": 1.8,
+      "total_profit": 8293,
+      "final_cash": 1008293,
+      "trades": 159,
+      "return_pct": 0.83
+    },
+    {
+      "mult": 1.85,
+      "total_profit": 12673,
+      "final_cash": 1012673,
+      "trades": 150,
+      "return_pct": 1.27
+    },
+    {
+      "mult": 1.9,
+      "total_profit": 19683,
+      "final_cash": 1019683,
+      "trades": 145,
+      "return_pct": 1.97
+    },
+    {
+      "mult": 1.95,
+      "total_profit": 27123,
+      "final_cash": 1027123,
+      "trades": 138,
+      "return_pct": 2.71
+    },
+    {
+      "mult": 2.0,
+      "total_profit": 33213,
+      "final_cash": 1033213,
+      "trades": 128,
+      "return_pct": 3.32
+    }
+  ]
+}

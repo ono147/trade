@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "default_rank_fraction": 0.3,
+    "elapsed_sec": 80.93,
+    "index_sizes": {
+      "JP": 225,
+      "US_DOW30": 30,
+      "US_SP500": 503,
+      "UK_FTSE100": 100,
+      "DE_DAX40": 40,
+      "FR_CAC40": 40
+    }
+  },
+  "rows": [
+    {
+      "market": "JP",
+      "session": "JP",
+      "exchange_tz": "Asia/Tokyo",
+      "index_constituent_count": 225,
+      "rank_fraction": 0.3,
+      "rank_top_n_effective": 68,
+      "volume_mult": 1.35,
+      "return_pct": 12.093673706054688,
+      "total_profit": 120936.73706054688,
+      "final_cash": 1120936.7370605469,
+      "trades": 202,
+      "test_dates": 49
+    }
+  ]
+}

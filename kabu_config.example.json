@@ -1,0 +1,23 @@
+{
+  "api_password": "YOUR_API_PASSWORD",
+  "trade_password": "YOUR_TRADE_PASSWORD",
+  "base_url": "http://localhost:18081/kabusapi",
+  "account_type": 4,
+  "fund_type": "AA",
+  "exchange": 9,
+  "rank_fraction": 0.48,
+  "volume_mult": 1.43,
+  "stop_loss_pct": 0.005,
+  "max_position_value_pct": 1.0,
+  "oneshot_max_yen": 0,
+  "max_lot_value_yen": 500000,
+  "yf_period": "59d",
+  "is_production": true,
+  "_comment_base_url": "本番: http://localhost:18080/kabusapi, 検証: http://localhost:18081/kabusapi",
+  "_comment_exchange": "発注は常に9=SOR。板情報取得は東証(1)を別途使用。27=東証+（未使用）",
+  "_comment_account_type": "2=一般, 4=特定, 12=法人",
+  "_comment_fund_type": "現物買いの預り区分。信用口座あり: AA=信用代用（推奨）。信用口座なし: 02=保護。CashMarginは常に1（現物）。信用新規はしない",
+  "_comment_max_position": "1回の買いに使う買付可能額の上限比率（1.0=全額）",
+  "_comment_oneshot_max_yen": "kabuワンショット金額上限以下に設定。0=比率のみで制限",
+  "_comment_max_lot_value_yen": "100株の想定購入金額がこれを超える銘柄は選定除外（50万=株価5000円超を除外）"
+}

@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "best_mult_from_jp": 1.35,
+    "elapsed_sec": 465.66
+  },
+  "markets": {
+    "US_DOW30": {
+      "universe_size": 17,
+      "active_symbols": 12,
+      "dates": 50,
+      "failed_15m": 5,
+      "failed_5m": 5,
+      "total_profit": -32350.28705596924,
+      "final_cash": 967649.7129440308,
+      "trades": 111,
+      "return_pct": -3.2350287055969242
+    },
+    "US_SP500": {
+      "universe_size": 503,
+      "active_symbols": 503,
+      "dates": 50,
+      "failed_15m": 0,
+      "failed_5m": 0,
+      "total_profit": -30322.701835632324,
+      "final_cash": 969677.2981643677,
+      "trades": 327,
+      "return_pct": -3.0322701835632326
+    },
+    "UK_FTSE100": {
+      "universe_size": 100,
+      "active_symbols": 99,
+      "dates": 49,
+      "failed_15m": 1,
+      "failed_5m": 1,
+      "total_profit": -528888.0138397217,
+      "final_cash": 471111.9861602783,
+      "trades": 634,
+      "return_pct": -52.88880138397217
+    },
+    "DE_DAX40": {
+      "universe_size": 40,
+      "active_symbols": 40,
+      "dates": 49,
+      "failed_15m": 0,
+      "failed_5m": 0,
+      "total_profit": -134276.21269226074,
+      "final_cash": 865723.7873077393,
+      "trades": 372,
+      "return_pct": -13.427621269226076
+    },
+    "FR_CAC40": {
+      "universe_size": 40,
+      "active_symbols": 40,
+      "dates": 49,
+      "failed_15m": 0,
+      "failed_5m": 0,
+      "total_profit": -222048.68478775024,
+      "final_cash": 777951.3152122498,
+      "trades": 395,
+      "return_pct": -22.204868478775026
+    }
+  }
+}

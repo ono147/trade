@@ -1,0 +1,211 @@
+{
+  "1.00": {
+    "trades": 265,
+    "win_rate": 0.30943396226415093,
+    "avg_pnl": -147.3813154112618,
+    "profit_factor": 0.8916313352572005,
+    "reason_counts": {
+      "StopLoss": 20,
+      "DeadCross": 201,
+      "TimeLimit": 44
+    },
+    "reason_pnl": {
+      "StopLoss": -101124.39651489258,
+      "DeadCross": -107290.30303955078,
+      "TimeLimit": 169358.65097045898
+    },
+    "total_profit": -39056.048583984375,
+    "final_cash": 960943.9514160156,
+    "return_pct": -3.905604858398438
+  },
+  "1.10": {
+    "trades": 230,
+    "win_rate": 0.29130434782608694,
+    "avg_pnl": -31.97471452795941,
+    "profit_factor": 0.9766789087593196,
+    "reason_counts": {
+      "DeadCross": 178,
+      "StopLoss": 13,
+      "TimeLimit": 39
+    },
+    "reason_pnl": {
+      "DeadCross": -102321.23260498047,
+      "StopLoss": -61325.09803771973,
+      "TimeLimit": 156292.14630126953
+    },
+    "total_profit": -7354.184341430664,
+    "final_cash": 992645.8156585693,
+    "return_pct": -0.7354184341430664
+  },
+  "1.20": {
+    "trades": 184,
+    "win_rate": 0.31521739130434784,
+    "avg_pnl": 17.49591412751571,
+    "profit_factor": 1.0113017838119829,
+    "reason_counts": {
+      "DeadCross": 133,
+      "StopLoss": 14,
+      "TimeLimit": 37
+    },
+    "reason_pnl": {
+      "DeadCross": -77945.01037597656,
+      "StopLoss": -69857.17315673828,
+      "TimeLimit": 151021.43173217773
+    },
+    "total_profit": 3219.2481994628906,
+    "final_cash": 1003219.2481994629,
+    "return_pct": 0.3219248199462891
+  },
+  "1.30": {
+    "trades": 167,
+    "win_rate": 0.30538922155688625,
+    "avg_pnl": -130.34651750575998,
+    "profit_factor": 0.9137340811838572,
+    "reason_counts": {
+      "StopLoss": 12,
+      "DeadCross": 120,
+      "TimeLimit": 35
+    },
+    "reason_pnl": {
+      "StopLoss": -62053.57780456543,
+      "DeadCross": -95882.60536193848,
+      "TimeLimit": 136168.314743042
+    },
+    "total_profit": -21767.868423461914,
+    "final_cash": 978232.1315765381,
+    "return_pct": -2.1767868423461914
+  },
+  "1.40": {
+    "trades": 156,
+    "win_rate": 0.2948717948717949,
+    "avg_pnl": -604.7213823367388,
+    "profit_factor": 0.6183376638261563,
+    "reason_counts": {
+      "StopLoss": 14,
+      "DeadCross": 112,
+      "TimeLimit": 30
+    },
+    "reason_pnl": {
+      "StopLoss": -74271.85516357422,
+      "DeadCross": -106562.24098205566,
+      "TimeLimit": 86497.56050109863
+    },
+    "total_profit": -94336.53564453125,
+    "final_cash": 905663.4643554688,
+    "return_pct": -9.433653564453124
+  },
+  "1.50": {
+    "trades": 123,
+    "win_rate": 0.2926829268292683,
+    "avg_pnl": -329.3682129402471,
+    "profit_factor": 0.7989666712091388,
+    "reason_counts": {
+      "DeadCross": 92,
+      "TimeLimit": 24,
+      "StopLoss": 7
+    },
+    "reason_pnl": {
+      "DeadCross": -92748.32000732422,
+      "TimeLimit": 95470.03288269043,
+      "StopLoss": -43234.0030670166
+    },
+    "total_profit": -40512.29019165039,
+    "final_cash": 959487.7098083496,
+    "return_pct": -4.051229019165039
+  },
+  "1.60": {
+    "trades": 107,
+    "win_rate": 0.2897196261682243,
+    "avg_pnl": -279.40636037666104,
+    "profit_factor": 0.8374413336526768,
+    "reason_counts": {
+      "DeadCross": 80,
+      "TimeLimit": 21,
+      "StopLoss": 6
+    },
+    "reason_pnl": {
+      "DeadCross": -73013.95225524902,
+      "TimeLimit": 88184.95140075684,
+      "StopLoss": -45067.47970581055
+    },
+    "total_profit": -29896.480560302734,
+    "final_cash": 970103.5194396973,
+    "return_pct": -2.9896480560302736
+  },
+  "1.70": {
+    "trades": 91,
+    "win_rate": 0.2857142857142857,
+    "avg_pnl": -449.070077414041,
+    "profit_factor": 0.7337164994480327,
+    "reason_counts": {
+      "DeadCross": 71,
+      "StopLoss": 4,
+      "TimeLimit": 16
+    },
+    "reason_pnl": {
+      "DeadCross": -67830.93338012695,
+      "StopLoss": -32008.57276916504,
+      "TimeLimit": 58974.12910461426
+    },
+    "total_profit": -40865.377044677734,
+    "final_cash": 959134.6229553223,
+    "return_pct": -4.086537704467774
+  },
+  "1.80": {
+    "trades": 77,
+    "win_rate": 0.3116883116883117,
+    "avg_pnl": -504.03040601061537,
+    "profit_factor": 0.7035934244150083,
+    "reason_counts": {
+      "DeadCross": 60,
+      "StopLoss": 4,
+      "TimeLimit": 13
+    },
+    "reason_pnl": {
+      "DeadCross": -45968.47229003906,
+      "StopLoss": -31910.572814941406,
+      "TimeLimit": 39068.703842163086
+    },
+    "total_profit": -38810.34126281738,
+    "final_cash": 961189.6587371826,
+    "return_pct": -3.8810341262817385
+  },
+  "1.90": {
+    "trades": 64,
+    "win_rate": 0.28125,
+    "avg_pnl": -149.07732009887695,
+    "profit_factor": 0.9000210658701927,
+    "reason_counts": {
+      "DeadCross": 53,
+      "StopLoss": 2,
+      "TimeLimit": 9
+    },
+    "reason_pnl": {
+      "DeadCross": -28598.594284057617,
+      "StopLoss": -12409.55696105957,
+      "TimeLimit": 31467.202758789062
+    },
+    "total_profit": -9540.948486328125,
+    "final_cash": 990459.0515136719,
+    "return_pct": -0.9540948486328126
+  },
+  "2.00": {
+    "trades": 57,
+    "win_rate": 0.2982456140350877,
+    "avg_pnl": -300.9382749858655,
+    "profit_factor": 0.7873065454316298,
+    "reason_counts": {
+      "StopLoss": 2,
+      "TimeLimit": 9,
+      "DeadCross": 46
+    },
+    "reason_pnl": {
+      "StopLoss": -12409.55696105957,
+      "TimeLimit": 19218.003845214844,
+      "DeadCross": -23961.92855834961
+    },
+    "total_profit": -17153.481674194336,
+    "final_cash": 982846.5183258057,
+    "return_pct": -1.7153481674194337
+  }
+}

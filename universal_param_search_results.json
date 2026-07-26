@@ -1,0 +1,474 @@
+{
+  "meta": {
+    "started_at": "2026-04-16 20:35:16",
+    "elapsed_sec": 2279.8,
+    "markets": [
+      "JP",
+      "US_DOW30",
+      "UK_FTSE100",
+      "DE_DAX40",
+      "FR_CAC40"
+    ],
+    "rank_fractions": [
+      0.25,
+      0.3,
+      0.35
+    ],
+    "volume_mults": [
+      1.0,
+      1.1,
+      1.2,
+      1.3,
+      1.4,
+      1.5,
+      1.6,
+      1.7,
+      1.8,
+      1.9,
+      2.0
+    ]
+  },
+  "top_candidates": [
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.3,
+      "markets": {
+        "JP": {
+          "return_pct": 17.014012603759767,
+          "total_profit": 170140.12603759766,
+          "final_cash": 1170140.1260375977,
+          "trades": 201,
+          "top_n_effective": 68
+        },
+        "US_DOW30": {
+          "return_pct": -8.518666801452637,
+          "total_profit": -85186.66801452637,
+          "final_cash": 914813.3319854736,
+          "trades": 78,
+          "top_n_effective": 9
+        },
+        "UK_FTSE100": {
+          "return_pct": -27.464329147338866,
+          "total_profit": -274643.2914733887,
+          "final_cash": 725356.7085266113,
+          "trades": 233,
+          "top_n_effective": 30
+        },
+        "DE_DAX40": {
+          "return_pct": 7.14008337020874,
+          "total_profit": 71400.8337020874,
+          "final_cash": 1071400.8337020874,
+          "trades": 201,
+          "top_n_effective": 12
+        },
+        "FR_CAC40": {
+          "return_pct": -1.5058139419555665,
+          "total_profit": -15058.139419555664,
+          "final_cash": 984941.8605804443,
+          "trades": 215,
+          "top_n_effective": 12
+        }
+      },
+      "mean_return_pct": -2.666942783355713,
+      "min_return_pct": -27.464329147338866,
+      "objective": -8.159808612823486
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.2,
+      "markets": {
+        "JP": {
+          "return_pct": 6.828989868164062,
+          "total_profit": 68289.89868164062,
+          "final_cash": 1068289.8986816406,
+          "trades": 227,
+          "top_n_effective": 68
+        },
+        "US_DOW30": {
+          "return_pct": -9.91607177734375,
+          "total_profit": -99160.7177734375,
+          "final_cash": 900839.2822265625,
+          "trades": 87,
+          "top_n_effective": 9
+        },
+        "UK_FTSE100": {
+          "return_pct": -26.239770507812498,
+          "total_profit": -262397.705078125,
+          "final_cash": 737602.294921875,
+          "trades": 267,
+          "top_n_effective": 30
+        },
+        "DE_DAX40": {
+          "return_pct": 8.741090717315673,
+          "total_profit": 87410.90717315674,
+          "final_cash": 1087410.9071731567,
+          "trades": 231,
+          "top_n_effective": 12
+        },
+        "FR_CAC40": {
+          "return_pct": 4.821324844360351,
+          "total_profit": 48213.248443603516,
+          "final_cash": 1048213.2484436035,
+          "trades": 223,
+          "top_n_effective": 12
+        }
+      },
+      "mean_return_pct": -3.152887371063232,
+      "min_return_pct": -26.239770507812498,
+      "objective": -8.400841472625732
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.4,
+      "markets": {
+        "JP": {
+          "return_pct": 13.758003997802733,
+          "total_profit": 137580.03997802734,
+          "final_cash": 1137580.0399780273,
+          "trades": 200,
+          "top_n_effective": 68
+        },
+        "US_DOW30": {
+          "return_pct": -8.463583068847656,
+          "total_profit": -84635.83068847656,
+          "final_cash": 915364.1693115234,
+          "trades": 69,
+          "top_n_effective": 9
+        },
+        "UK_FTSE100": {
+          "return_pct": -24.953784713745115,
+          "total_profit": -249537.84713745117,
+          "final_cash": 750462.1528625488,
+          "trades": 223,
+          "top_n_effective": 30
+        },
+        "DE_DAX40": {
+          "return_pct": 2.219892597198486,
+          "total_profit": 22198.925971984863,
+          "final_cash": 1022198.9259719849,
+          "trades": 186,
+          "top_n_effective": 12
+        },
+        "FR_CAC40": {
+          "return_pct": 0.1899927520751953,
+          "total_profit": 1899.9275207519531,
+          "final_cash": 1001899.927520752,
+          "trades": 193,
+          "top_n_effective": 12
+        }
+      },
+      "mean_return_pct": -3.449895687103271,
+      "min_return_pct": -24.953784713745115,
+      "objective": -8.440652629852295
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.2,
+      "markets": {
+        "JP": {
+          "return_pct": 4.848987274169922,
+          "total_profit": 48489.87274169922,
+          "final_cash": 1048489.8727416992,
+          "trades": 194,
+          "top_n_effective": 56
+        },
+        "US_DOW30": {
+          "return_pct": -8.822196044921874,
+          "total_profit": -88221.96044921875,
+          "final_cash": 911778.0395507812,
+          "trades": 74,
+          "top_n_effective": 8
+        },
+        "UK_FTSE100": {
+          "return_pct": -26.239770507812498,
+          "total_profit": -262397.705078125,
+          "final_cash": 737602.294921875,
+          "trades": 267,
+          "top_n_effective": 25
+        },
+        "DE_DAX40": {
+          "return_pct": 8.741090717315673,
+          "total_profit": 87410.90717315674,
+          "final_cash": 1087410.9071731567,
+          "trades": 231,
+          "top_n_effective": 10
+        },
+        "FR_CAC40": {
+          "return_pct": 4.821324844360351,
+          "total_profit": 48213.248443603516,
+          "final_cash": 1048213.2484436035,
+          "trades": 223,
+          "top_n_effective": 10
+        }
+      },
+      "mean_return_pct": -3.330112743377685,
+      "min_return_pct": -26.239770507812498,
+      "objective": -8.578066844940185
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 2.0,
+      "markets": {
+        "JP": {
+          "return_pct": 3.953994598388672,
+          "total_profit": 39539.94598388672,
+          "final_cash": 1039539.9459838867,
+          "trades": 119,
+          "top_n_effective": 68
+        },
+        "US_DOW30": {
+          "return_pct": -0.7737838745117188,
+          "total_profit": -7737.8387451171875,
+          "final_cash": 992262.1612548828,
+          "trades": 15,
+          "top_n_effective": 9
+        },
+        "UK_FTSE100": {
+          "return_pct": -21.278869552612303,
+          "total_profit": -212788.69552612305,
+          "final_cash": 787211.304473877,
+          "trades": 152,
+          "top_n_effective": 30
+        },
+        "DE_DAX40": {
+          "return_pct": -2.505464210510254,
+          "total_profit": -25054.64210510254,
+          "final_cash": 974945.3578948975,
+          "trades": 129,
+          "top_n_effective": 12
+        },
+        "FR_CAC40": {
+          "return_pct": -1.7987298583984375,
+          "total_profit": -17987.298583984375,
+          "final_cash": 982012.7014160156,
+          "trades": 128,
+          "top_n_effective": 12
+        }
+      },
+      "mean_return_pct": -4.480570579528808,
+      "min_return_pct": -21.278869552612303,
+      "objective": -8.73634449005127
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 2.0,
+      "markets": {
+        "JP": {
+          "return_pct": 3.131329040527344,
+          "total_profit": 31313.290405273438,
+          "final_cash": 1031313.2904052734,
+          "trades": 130,
+          "top_n_effective": 79
+        },
+        "US_DOW30": {
+          "return_pct": -0.7737838745117188,
+          "total_profit": -7737.8387451171875,
+          "final_cash": 992262.1612548828,
+          "trades": 15,
+          "top_n_effective": 10
+        },
+        "UK_FTSE100": {
+          "return_pct": -21.278869552612303,
+          "total_profit": -212788.69552612305,
+          "final_cash": 787211.304473877,
+          "trades": 152,
+          "top_n_effective": 35
+        },
+        "DE_DAX40": {
+          "return_pct": -2.505464210510254,
+          "total_profit": -25054.64210510254,
+          "final_cash": 974945.3578948975,
+          "trades": 129,
+          "top_n_effective": 14
+        },
+        "FR_CAC40": {
+          "return_pct": -1.7987298583984375,
+          "total_profit": -17987.298583984375,
+          "final_cash": 982012.7014160156,
+          "trades": 128,
+          "top_n_effective": 14
+        }
+      },
+      "mean_return_pct": -4.645103691101074,
+      "min_return_pct": -21.278869552612303,
+      "objective": -8.900877601623534
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.3,
+      "markets": {
+        "JP": {
+          "return_pct": 13.241345520019532,
+          "total_profit": 132413.4552001953,
+          "final_cash": 1132413.4552001953,
+          "trades": 216,
+          "top_n_effective": 79
+        },
+        "US_DOW30": {
+          "return_pct": -8.662826843261719,
+          "total_profit": -86628.26843261719,
+          "final_cash": 913371.7315673828,
+          "trades": 84,
+          "top_n_effective": 10
+        },
+        "UK_FTSE100": {
+          "return_pct": -27.464329147338866,
+          "total_profit": -274643.2914733887,
+          "final_cash": 725356.7085266113,
+          "trades": 233,
+          "top_n_effective": 35
+        },
+        "DE_DAX40": {
+          "return_pct": 7.14008337020874,
+          "total_profit": 71400.8337020874,
+          "final_cash": 1071400.8337020874,
+          "trades": 201,
+          "top_n_effective": 14
+        },
+        "FR_CAC40": {
+          "return_pct": -1.5058139419555665,
+          "total_profit": -15058.139419555664,
+          "final_cash": 984941.8605804443,
+          "trades": 215,
+          "top_n_effective": 14
+        }
+      },
+      "mean_return_pct": -3.450308208465576,
+      "min_return_pct": -27.464329147338866,
+      "objective": -8.94317403793335
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.2,
+      "markets": {
+        "JP": {
+          "return_pct": 4.096323547363282,
+          "total_profit": 40963.23547363281,
+          "final_cash": 1040963.2354736328,
+          "trades": 233,
+          "top_n_effective": 79
+        },
+        "US_DOW30": {
+          "return_pct": -10.093631401062012,
+          "total_profit": -100936.31401062012,
+          "final_cash": 899063.6859893799,
+          "trades": 93,
+          "top_n_effective": 10
+        },
+        "UK_FTSE100": {
+          "return_pct": -26.239770507812498,
+          "total_profit": -262397.705078125,
+          "final_cash": 737602.294921875,
+          "trades": 267,
+          "top_n_effective": 35
+        },
+        "DE_DAX40": {
+          "return_pct": 8.741090717315673,
+          "total_profit": 87410.90717315674,
+          "final_cash": 1087410.9071731567,
+          "trades": 231,
+          "top_n_effective": 14
+        },
+        "FR_CAC40": {
+          "return_pct": 4.821324844360351,
+          "total_profit": 48213.248443603516,
+          "final_cash": 1048213.2484436035,
+          "trades": 223,
+          "top_n_effective": 14
+        }
+      },
+      "mean_return_pct": -3.7349325599670413,
+      "min_return_pct": -26.239770507812498,
+      "objective": -8.982886661529541
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.1,
+      "markets": {
+        "JP": {
+          "return_pct": 4.065000762939453,
+          "total_profit": 40650.00762939453,
+          "final_cash": 1040650.0076293945,
+          "trades": 219,
+          "top_n_effective": 56
+        },
+        "US_DOW30": {
+          "return_pct": -8.215955390930176,
+          "total_profit": -82159.55390930176,
+          "final_cash": 917840.4460906982,
+          "trades": 88,
+          "top_n_effective": 8
+        },
+        "UK_FTSE100": {
+          "return_pct": -27.451855087280276,
+          "total_profit": -274518.55087280273,
+          "final_cash": 725481.4491271973,
+          "trades": 285,
+          "top_n_effective": 25
+        },
+        "DE_DAX40": {
+          "return_pct": 9.84509994506836,
+          "total_profit": 98450.9994506836,
+          "final_cash": 1098450.9994506836,
+          "trades": 232,
+          "top_n_effective": 10
+        },
+        "FR_CAC40": {
+          "return_pct": 3.0898096466064455,
+          "total_profit": 30898.096466064453,
+          "final_cash": 1030898.0964660645,
+          "trades": 245,
+          "top_n_effective": 10
+        }
+      },
+      "mean_return_pct": -3.733580024719238,
+      "min_return_pct": -27.451855087280276,
+      "objective": -9.223951042175294
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.4,
+      "markets": {
+        "JP": {
+          "return_pct": 9.275337829589844,
+          "total_profit": 92753.37829589844,
+          "final_cash": 1092753.3782958984,
+          "trades": 217,
+          "top_n_effective": 79
+        },
+        "US_DOW30": {
+          "return_pct": -8.537734680175781,
+          "total_profit": -85377.34680175781,
+          "final_cash": 914622.6531982422,
+          "trades": 72,
+          "top_n_effective": 10
+        },
+        "UK_FTSE100": {
+          "return_pct": -24.953784713745115,
+          "total_profit": -249537.84713745117,
+          "final_cash": 750462.1528625488,
+          "trades": 223,
+          "top_n_effective": 35
+        },
+        "DE_DAX40": {
+          "return_pct": 2.219892597198486,
+          "total_profit": 22198.925971984863,
+          "final_cash": 1022198.9259719849,
+          "trades": 186,
+          "top_n_effective": 14
+        },
+        "FR_CAC40": {
+          "return_pct": 0.1899927520751953,
+          "total_profit": 1899.9275207519531,
+          "final_cash": 1001899.927520752,
+          "trades": 193,
+          "top_n_effective": 14
+        }
+      },
+      "mean_return_pct": -4.361259243011474,
+      "min_return_pct": -24.953784713745115,
+      "objective": -9.352016185760498
+    }
+  ],
+  "all_candidates_count": 33
+}

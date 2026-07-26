@@ -1,0 +1,1447 @@
+{
+  "meta": {
+    "source_file": "jp_objective_sweep_results.json",
+    "score_mode": "ratio_of_initial",
+    "objective_formula": "w_return*return_pct + w_median_pp*(median/C*100) - w_dd_pp*(max_dd/C*100) - w_cvar_pp*(cvar5/C*100) - w_conc*top1_share",
+    "initial_cash": 1000000,
+    "note": "ratio_of_initial: all yen paths divided by initial_cash; linear strategy scaling keeps rankings stable when capital scales.",
+    "w_return": 250.0,
+    "w_median_pp": 900.0,
+    "w_dd_pp": 80.0,
+    "w_cvar_pp": 200.0,
+    "w_conc": 20.0,
+    "require_positive_return": false,
+    "n_all_runs": 33,
+    "n_ranked_runs": 33
+  },
+  "best_by_profit_focused_score": {
+    "rank_fraction": 0.3,
+    "volume_mult": 1.3,
+    "top_n_effective": 68,
+    "objective_score": -30513.647289035704,
+    "components": {
+      "median_daily_pnl": -3010.0006103515625,
+      "max_drawdown_yen": 71953.25012207031,
+      "cvar5_daily_loss_yen": 15710.005696614584,
+      "top1_symbol_abs_pnl_share": 0.13084705236893485
+    },
+    "performance": {
+      "total_profit_yen": 133966.8212890625,
+      "final_cash": 1133966.8212890625,
+      "return_pct": 13.396682128906251,
+      "trades": 207,
+      "n_days": 49,
+      "daily_win_rate": 0.42857142857142855,
+      "mean_daily_pnl": 2734.0167610012754,
+      "std_daily_pnl": 15578.829228148497,
+      "min_daily_pnl": -17550.0,
+      "max_daily_pnl": 72050.00915527344
+    },
+    "weights": {
+      "lambda_mdd": 0.0003,
+      "lambda_cvar": 0.5,
+      "lambda_conc": 0.15
+    },
+    "profit_focused_score": 2185.82742133869,
+    "score_mode": "ratio_of_initial",
+    "score_breakdown": {
+      "median_daily_pct_of_initial": -0.30100006103515625,
+      "max_drawdown_pct_of_initial": 7.1953250122070305,
+      "cvar5_daily_loss_pct_of_initial": 1.5710005696614584,
+      "top1_symbol_share": 0.13084705236893485,
+      "contrib_return": 3349.170532226563,
+      "contrib_median_pct": -270.9000549316406,
+      "contrib_drawdown_pct": -575.6260009765624,
+      "contrib_cvar_pct": -314.2001139322917,
+      "contrib_concentration": -2.616941047378697
+    }
+  },
+  "ranked_by_profit_focused_score": [
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.3,
+      "top_n_effective": 68,
+      "objective_score": -30513.647289035704,
+      "components": {
+        "median_daily_pnl": -3010.0006103515625,
+        "max_drawdown_yen": 71953.25012207031,
+        "cvar5_daily_loss_yen": 15710.005696614584,
+        "top1_symbol_abs_pnl_share": 0.13084705236893485
+      },
+      "performance": {
+        "total_profit_yen": 133966.8212890625,
+        "final_cash": 1133966.8212890625,
+        "return_pct": 13.396682128906251,
+        "trades": 207,
+        "n_days": 49,
+        "daily_win_rate": 0.42857142857142855,
+        "mean_daily_pnl": 2734.0167610012754,
+        "std_daily_pnl": 15578.829228148497,
+        "min_daily_pnl": -17550.0,
+        "max_daily_pnl": 72050.00915527344
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 2185.82742133869,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.30100006103515625,
+        "max_drawdown_pct_of_initial": 7.1953250122070305,
+        "cvar5_daily_loss_pct_of_initial": 1.5710005696614584,
+        "top1_symbol_share": 0.13084705236893485,
+        "contrib_return": 3349.170532226563,
+        "contrib_median_pct": -270.9000549316406,
+        "contrib_drawdown_pct": -575.6260009765624,
+        "contrib_cvar_pct": -314.2001139322917,
+        "contrib_concentration": -2.616941047378697
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.3,
+      "top_n_effective": 79,
+      "objective_score": -28756.02791433736,
+      "components": {
+        "median_daily_pnl": -3079.986572265625,
+        "max_drawdown_yen": 66533.349609375,
+        "cvar5_daily_loss_yen": 16086.671956380209,
+        "top1_symbol_abs_pnl_share": 0.11741830239332547
+      },
+      "performance": {
+        "total_profit_yen": 124493.42956542969,
+        "final_cash": 1124493.4295654297,
+        "return_pct": 12.449342956542969,
+        "trades": 230,
+        "n_days": 49,
+        "daily_win_rate": 0.42857142857142855,
+        "mean_daily_pnl": 2540.682236029177,
+        "std_daily_pnl": 15486.425074192824,
+        "min_daily_pnl": -17550.0,
+        "max_daily_pnl": 72060.0082397461
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 1978.7883455813653,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.3079986572265625,
+        "max_drawdown_pct_of_initial": 6.6533349609375,
+        "cvar5_daily_loss_pct_of_initial": 1.6086671956380207,
+        "top1_symbol_share": 0.11741830239332547,
+        "contrib_return": 3112.335739135742,
+        "contrib_median_pct": -277.19879150390625,
+        "contrib_drawdown_pct": -532.2667968750001,
+        "contrib_cvar_pct": -321.73343912760413,
+        "contrib_concentration": -2.3483660478665094
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.4,
+      "top_n_effective": 68,
+      "objective_score": -29870.173791957637,
+      "components": {
+        "median_daily_pnl": -899.9908447265625,
+        "max_drawdown_yen": 79203.2699584961,
+        "cvar5_daily_loss_yen": 14843.339029947916,
+        "top1_symbol_abs_pnl_share": 0.14349834967513045
+      },
+      "performance": {
+        "total_profit_yen": 105566.7221069336,
+        "final_cash": 1105566.7221069336,
+        "return_pct": 10.556672210693359,
+        "trades": 210,
+        "n_days": 49,
+        "daily_win_rate": 0.4489795918367347,
+        "mean_daily_pnl": 2154.422900141502,
+        "std_daily_pnl": 14578.6044402909,
+        "min_daily_pnl": -15650.0,
+        "max_daily_pnl": 72060.0082397461
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 1624.8059693875193,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.08999908447265625,
+        "max_drawdown_pct_of_initial": 7.920326995849609,
+        "cvar5_daily_loss_pct_of_initial": 1.4843339029947917,
+        "top1_symbol_share": 0.14349834967513045,
+        "contrib_return": 2639.16805267334,
+        "contrib_median_pct": -80.99917602539062,
+        "contrib_drawdown_pct": -633.6261596679688,
+        "contrib_cvar_pct": -296.86678059895837,
+        "contrib_concentration": -2.869966993502609
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.4,
+      "top_n_effective": 79,
+      "objective_score": -30015.39923061004,
+      "components": {
+        "median_daily_pnl": -3010.0006103515625,
+        "max_drawdown_yen": 64103.27606201172,
+        "cvar5_daily_loss_yen": 14836.671956380209,
+        "top1_symbol_abs_pnl_share": 0.13045221106166513
+      },
+      "performance": {
+        "total_profit_yen": 83363.32550048828,
+        "final_cash": 1083363.3255004883,
+        "return_pct": 8.336332550048828,
+        "trades": 229,
+        "n_days": 49,
+        "daily_win_rate": 0.42857142857142855,
+        "mean_daily_pnl": 1701.292357152822,
+        "std_daily_pnl": 14625.867203807256,
+        "min_daily_pnl": -15650.0,
+        "max_daily_pnl": 72060.0082397461
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 1001.0143907356351,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.30100006103515625,
+        "max_drawdown_pct_of_initial": 6.410327606201172,
+        "cvar5_daily_loss_pct_of_initial": 1.483667195638021,
+        "top1_symbol_share": 0.13045221106166513,
+        "contrib_return": 2084.083137512207,
+        "contrib_median_pct": -270.9000549316406,
+        "contrib_drawdown_pct": -512.8262084960937,
+        "contrib_cvar_pct": -296.7334391276042,
+        "contrib_concentration": -2.6090442212333027
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.0,
+      "top_n_effective": 79,
+      "objective_score": -21717.13117164393,
+      "components": {
+        "median_daily_pnl": -2150.0,
+        "max_drawdown_yen": 66843.23272705078,
+        "cvar5_daily_loss_yen": 15936.667887369791,
+        "top1_symbol_abs_pnl_share": 0.07719162838760615
+      },
+      "performance": {
+        "total_profit_yen": 70816.71752929688,
+        "final_cash": 1070816.7175292969,
+        "return_pct": 7.0816717529296875,
+        "trades": 302,
+        "n_days": 49,
+        "daily_win_rate": 0.4489795918367347,
+        "mean_daily_pnl": 1445.2391332509567,
+        "std_daily_pnl": 12175.536066988832,
+        "min_daily_pnl": -16750.0,
+        "max_daily_pnl": 41570.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 721.8948861008678,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.215,
+        "max_drawdown_pct_of_initial": 6.684323272705078,
+        "cvar5_daily_loss_pct_of_initial": 1.593666788736979,
+        "top1_symbol_share": 0.07719162838760615,
+        "contrib_return": 1770.4179382324219,
+        "contrib_median_pct": -193.5,
+        "contrib_drawdown_pct": -534.7458618164062,
+        "contrib_cvar_pct": -318.7333577473958,
+        "contrib_concentration": -1.5438325677521232
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.4,
+      "top_n_effective": 56,
+      "objective_score": -23210.08837732586,
+      "components": {
+        "median_daily_pnl": -650.0,
+        "max_drawdown_yen": 67090.07110595703,
+        "cvar5_daily_loss_yen": 13250.0,
+        "top1_symbol_abs_pnl_share": 0.10609974237329382
+      },
+      "performance": {
+        "total_profit_yen": 60039.939880371094,
+        "final_cash": 1060039.939880371,
+        "return_pct": 6.003993988037109,
+        "trades": 169,
+        "n_days": 49,
+        "daily_win_rate": 0.4489795918367347,
+        "mean_daily_pnl": 1225.3048955177774,
+        "std_daily_pnl": 10479.227903769208,
+        "min_daily_pnl": -16150.0,
+        "max_daily_pnl": 50520.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 638.6559333141552,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.065,
+        "max_drawdown_pct_of_initial": 6.709007110595704,
+        "cvar5_daily_loss_pct_of_initial": 1.325,
+        "top1_symbol_share": 0.10609974237329382,
+        "contrib_return": 1500.9984970092773,
+        "contrib_median_pct": -58.5,
+        "contrib_drawdown_pct": -536.7205688476563,
+        "contrib_cvar_pct": -265.0,
+        "contrib_concentration": -2.1219948474658765
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.3,
+      "top_n_effective": 56,
+      "objective_score": -24292.095778841605,
+      "components": {
+        "median_daily_pnl": -2179.986572265625,
+        "max_drawdown_yen": 61960.01281738281,
+        "cvar5_daily_loss_yen": 13966.666666666666,
+        "top1_symbol_abs_pnl_share": 0.10073458579598289
+      },
+      "performance": {
+        "total_profit_yen": 46220.037841796875,
+        "final_cash": 1046220.0378417969,
+        "return_pct": 4.622003784179688,
+        "trades": 179,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 943.2660784040179,
+        "std_daily_pnl": 10966.36421622169,
+        "min_daily_pnl": -17550.0,
+        "max_daily_pnl": 50520.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 182.2740269527002,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.2179986572265625,
+        "max_drawdown_pct_of_initial": 6.196001281738281,
+        "cvar5_daily_loss_pct_of_initial": 1.3966666666666665,
+        "top1_symbol_share": 0.10073458579598289,
+        "contrib_return": 1155.5009460449219,
+        "contrib_median_pct": -196.19879150390625,
+        "contrib_drawdown_pct": -495.68010253906243,
+        "contrib_cvar_pct": -279.3333333333333,
+        "contrib_concentration": -2.014691715919658
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.2,
+      "top_n_effective": 68,
+      "objective_score": -23880.06342335781,
+      "components": {
+        "median_daily_pnl": -2200.0,
+        "max_drawdown_yen": 56853.321838378906,
+        "cvar5_daily_loss_yen": 14433.354695638021,
+        "top1_symbol_abs_pnl_share": 0.09630886719324856
+      },
+      "performance": {
+        "total_profit_yen": 44986.60125732422,
+        "final_cash": 1044986.6012573242,
+        "return_pct": 4.498660125732422,
+        "trades": 238,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": 918.0939032106984,
+        "std_daily_pnl": 10828.048371577797,
+        "min_daily_pnl": -18610.0341796875,
+        "max_daily_pnl": 42320.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 181.24518546944884,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.22,
+        "max_drawdown_pct_of_initial": 5.6853321838378905,
+        "cvar5_daily_loss_pct_of_initial": 1.443335469563802,
+        "top1_symbol_share": 0.09630886719324856,
+        "contrib_return": 1124.6650314331055,
+        "contrib_median_pct": -198.0,
+        "contrib_drawdown_pct": -454.8265747070312,
+        "contrib_cvar_pct": -288.66709391276044,
+        "contrib_concentration": -1.9261773438649712
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.2,
+      "top_n_effective": 56,
+      "objective_score": -24959.404518013467,
+      "components": {
+        "median_daily_pnl": -2719.9981689453125,
+        "max_drawdown_yen": 55950.1708984375,
+        "cvar5_daily_loss_yen": 13460.016377766928,
+        "top1_symbol_abs_pnl_share": 0.10328408739276775
+      },
+      "performance": {
+        "total_profit_yen": 42699.87487792969,
+        "final_cash": 1042699.8748779297,
+        "return_pct": 4.269987487792968,
+        "trades": 199,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 871.4260179169324,
+        "std_daily_pnl": 11063.188917874439,
+        "min_daily_pnl": -18620.034790039062,
+        "max_daily_pnl": 50520.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": 103.82966025246994,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.27199981689453123,
+        "max_drawdown_pct_of_initial": 5.59501708984375,
+        "cvar5_daily_loss_pct_of_initial": 1.3460016377766928,
+        "top1_symbol_share": 0.10328408739276775,
+        "contrib_return": 1067.496871948242,
+        "contrib_median_pct": -244.7998352050781,
+        "contrib_drawdown_pct": -447.6013671875,
+        "contrib_cvar_pct": -269.20032755533856,
+        "contrib_concentration": -2.065681747855355
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.0,
+      "top_n_effective": 68,
+      "objective_score": -22767.141854455844,
+      "components": {
+        "median_daily_pnl": -2419.9951171875,
+        "max_drawdown_yen": 91809.94415283203,
+        "cvar5_daily_loss_yen": 15550.002034505209,
+        "top1_symbol_abs_pnl_share": 0.08363068491179927
+      },
+      "performance": {
+        "total_profit_yen": 45700.05798339844,
+        "final_cash": 1045700.0579833984,
+        "return_pct": 4.570005798339843,
+        "trades": 282,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": 932.6542445591518,
+        "std_daily_pnl": 11745.285515309688,
+        "min_daily_pnl": -16750.0,
+        "max_daily_pnl": 41570.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -122.45031857291072,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.24199951171875,
+        "max_drawdown_pct_of_initial": 9.180994415283203,
+        "cvar5_daily_loss_pct_of_initial": 1.555000203450521,
+        "top1_symbol_share": 0.08363068491179927,
+        "contrib_return": 1142.5014495849607,
+        "contrib_median_pct": -217.799560546875,
+        "contrib_drawdown_pct": -734.4795532226562,
+        "contrib_cvar_pct": -311.0000406901042,
+        "contrib_concentration": -1.6726136982359854
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.2,
+      "top_n_effective": 79,
+      "objective_score": -23407.66580752872,
+      "components": {
+        "median_daily_pnl": -2829.9972534179688,
+        "max_drawdown_yen": 63243.394470214844,
+        "cvar5_daily_loss_yen": 15133.354695638021,
+        "top1_symbol_abs_pnl_share": 0.08661345458633786
+      },
+      "performance": {
+        "total_profit_yen": 34723.223876953125,
+        "final_cash": 1034723.2238769531,
+        "return_pct": 3.4723223876953124,
+        "trades": 250,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": 708.6372219786352,
+        "std_daily_pnl": 10949.124827418798,
+        "min_daily_pnl": -18600.033569335938,
+        "max_daily_pnl": 42320.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -196.96567464999507,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.2829997253417969,
+        "max_drawdown_pct_of_initial": 6.324339447021485,
+        "cvar5_daily_loss_pct_of_initial": 1.5133354695638022,
+        "top1_symbol_share": 0.08661345458633786,
+        "contrib_return": 868.0805969238281,
+        "contrib_median_pct": -254.69975280761722,
+        "contrib_drawdown_pct": -505.9471557617188,
+        "contrib_cvar_pct": -302.66709391276044,
+        "contrib_concentration": -1.7322690917267571
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.0,
+      "top_n_effective": 56,
+      "objective_score": -24590.352800494104,
+      "components": {
+        "median_daily_pnl": -3460.0006103515625,
+        "max_drawdown_yen": 86929.99114990234,
+        "cvar5_daily_loss_yen": 14770.002237955729,
+        "top1_symbol_abs_pnl_share": 0.09146181382546473
+      },
+      "performance": {
+        "total_profit_yen": 43200.067138671875,
+        "final_cash": 1043200.0671386719,
+        "return_pct": 4.320006713867188,
+        "trades": 246,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 881.6340232382015,
+        "std_daily_pnl": 11383.631973641119,
+        "min_daily_pnl": -15850.0,
+        "max_daily_pnl": 43970.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -224.06758669968642,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.3460000610351563,
+        "max_drawdown_pct_of_initial": 8.692999114990235,
+        "cvar5_daily_loss_pct_of_initial": 1.4770002237955728,
+        "top1_symbol_share": 0.09146181382546473,
+        "contrib_return": 1080.0016784667969,
+        "contrib_median_pct": -311.4000549316407,
+        "contrib_drawdown_pct": -695.4399291992188,
+        "contrib_cvar_pct": -295.40004475911456,
+        "contrib_concentration": -1.8292362765092944
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.5,
+      "top_n_effective": 68,
+      "objective_score": -34057.06944334136,
+      "components": {
+        "median_daily_pnl": -1729.9957275390625,
+        "max_drawdown_yen": 70623.25897216797,
+        "cvar5_daily_loss_yen": 14433.333333333334,
+        "top1_symbol_abs_pnl_share": 0.16726146714295984
+      },
+      "performance": {
+        "total_profit_yen": 28026.638793945312,
+        "final_cash": 1028026.6387939453,
+        "return_pct": 2.8026638793945313,
+        "trades": 195,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": 571.9722202845982,
+        "std_daily_pnl": 13089.744454149157,
+        "min_daily_pnl": -15200.0,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -312.03161341675235,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.17299957275390623,
+        "max_drawdown_pct_of_initial": 7.062325897216796,
+        "cvar5_daily_loss_pct_of_initial": 1.4433333333333334,
+        "top1_symbol_share": 0.16726146714295984,
+        "contrib_return": 700.6659698486328,
+        "contrib_median_pct": -155.6996154785156,
+        "contrib_drawdown_pct": -564.9860717773437,
+        "contrib_cvar_pct": -288.6666666666667,
+        "contrib_concentration": -3.345229342859197
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.6,
+      "top_n_effective": 68,
+      "objective_score": -34727.78870939073,
+      "components": {
+        "median_daily_pnl": -1729.9957275390625,
+        "max_drawdown_yen": 67423.27423095703,
+        "cvar5_daily_loss_yen": 13861.100260416666,
+        "top1_symbol_abs_pnl_share": 0.1736467724624936
+      },
+      "performance": {
+        "total_profit_yen": 26256.637573242188,
+        "final_cash": 1026256.6375732422,
+        "return_pct": 2.6256637573242188,
+        "trades": 178,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": 535.8497463926977,
+        "std_daily_pnl": 12950.93834077917,
+        "min_daily_pnl": -15250.0,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -319.36481065270044,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.17299957275390623,
+        "max_drawdown_pct_of_initial": 6.742327423095704,
+        "cvar5_daily_loss_pct_of_initial": 1.3861100260416668,
+        "top1_symbol_share": 0.1736467724624936,
+        "contrib_return": 656.4159393310547,
+        "contrib_median_pct": -155.6996154785156,
+        "contrib_drawdown_pct": -539.3861938476563,
+        "contrib_cvar_pct": -277.22200520833337,
+        "contrib_concentration": -3.472935449249872
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.1,
+      "top_n_effective": 56,
+      "objective_score": -24516.527806726146,
+      "components": {
+        "median_daily_pnl": -2800.0,
+        "max_drawdown_yen": 61150.05187988281,
+        "cvar5_daily_loss_yen": 14000.017293294271,
+        "top1_symbol_abs_pnl_share": 0.09798782763010029
+      },
+      "performance": {
+        "total_profit_yen": 25119.985961914062,
+        "final_cash": 1025119.9859619141,
+        "return_pct": 2.511998596191406,
+        "trades": 226,
+        "n_days": 49,
+        "daily_win_rate": 0.3673469387755102,
+        "mean_daily_pnl": 512.6527747329401,
+        "std_daily_pnl": 11468.349476040043,
+        "min_daily_pnl": -18610.0341796875,
+        "max_daily_pnl": 50520.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -395.16086840969837,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.27999999999999997,
+        "max_drawdown_pct_of_initial": 6.115005187988281,
+        "cvar5_daily_loss_pct_of_initial": 1.4000017293294271,
+        "top1_symbol_share": 0.09798782763010029,
+        "contrib_return": 627.9996490478516,
+        "contrib_median_pct": -251.99999999999997,
+        "contrib_drawdown_pct": -489.2004150390625,
+        "contrib_cvar_pct": -280.00034586588544,
+        "contrib_concentration": -1.9597565526020058
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 2.0,
+      "top_n_effective": 68,
+      "objective_score": -39000.353354490304,
+      "components": {
+        "median_daily_pnl": -1919.9996948242188,
+        "max_drawdown_yen": 75163.26141357422,
+        "cvar5_daily_loss_yen": 11773.321533203125,
+        "top1_symbol_abs_pnl_share": 0.20780762609760303
+      },
+      "performance": {
+        "total_profit_yen": 22436.605834960938,
+        "final_cash": 1022436.6058349609,
+        "return_pct": 2.243660583496094,
+        "trades": 128,
+        "n_days": 49,
+        "daily_win_rate": 0.3469387755102041,
+        "mean_daily_pnl": 457.8899149992028,
+        "std_daily_pnl": 12286.459862587491,
+        "min_daily_pnl": -13900.0,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -452.81350115476465,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.19199996948242187,
+        "max_drawdown_pct_of_initial": 7.516326141357423,
+        "cvar5_daily_loss_pct_of_initial": 1.1773321533203125,
+        "top1_symbol_share": 0.20780762609760303,
+        "contrib_return": 560.9151458740234,
+        "contrib_median_pct": -172.7999725341797,
+        "contrib_drawdown_pct": -601.3060913085939,
+        "contrib_cvar_pct": -235.4664306640625,
+        "contrib_concentration": -4.156152521952061
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.5,
+      "top_n_effective": 79,
+      "objective_score": -34121.47110316041,
+      "components": {
+        "median_daily_pnl": -2900.0,
+        "max_drawdown_yen": 61423.26202392578,
+        "cvar5_daily_loss_yen": 14161.100260416666,
+        "top1_symbol_abs_pnl_share": 0.16081662662896598
+      },
+      "performance": {
+        "total_profit_yen": 21883.30535888672,
+        "final_cash": 1021883.3053588867,
+        "return_pct": 2.1883305358886718,
+        "trades": 208,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 446.59806854870857,
+        "std_daily_pnl": 13205.561357846602,
+        "min_daily_pnl": -15200.0,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -491.7417999601509,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.29,
+        "max_drawdown_pct_of_initial": 6.142326202392578,
+        "cvar5_daily_loss_pct_of_initial": 1.4161100260416666,
+        "top1_symbol_share": 0.16081662662896598,
+        "contrib_return": 547.082633972168,
+        "contrib_median_pct": -261.0,
+        "contrib_drawdown_pct": -491.38609619140624,
+        "contrib_cvar_pct": -283.2220052083333,
+        "contrib_concentration": -3.2163325325793197
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 2.0,
+      "top_n_effective": 79,
+      "objective_score": -38240.30112938829,
+      "components": {
+        "median_daily_pnl": -1900.0,
+        "max_drawdown_yen": 72073.25744628906,
+        "cvar5_daily_loss_yen": 15164.434814453125,
+        "top1_symbol_abs_pnl_share": 0.19157641163285224
+      },
+      "performance": {
+        "total_profit_yen": 22063.25225830078,
+        "final_cash": 1022063.2522583008,
+        "return_pct": 2.2063252258300783,
+        "trades": 138,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 450.27045425103637,
+        "std_daily_pnl": 12638.949079680597,
+        "min_daily_pnl": -18033.30078125,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -503.1249776345125,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.19,
+        "max_drawdown_pct_of_initial": 7.207325744628906,
+        "cvar5_daily_loss_pct_of_initial": 1.5164434814453125,
+        "top1_symbol_share": 0.19157641163285224,
+        "contrib_return": 551.5813064575195,
+        "contrib_median_pct": -171.0,
+        "contrib_drawdown_pct": -576.5860595703125,
+        "contrib_cvar_pct": -303.2886962890625,
+        "contrib_concentration": -3.831528232657045
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.9,
+      "top_n_effective": 79,
+      "objective_score": -38064.762621040994,
+      "components": {
+        "median_daily_pnl": -1930.0003051757812,
+        "max_drawdown_yen": 69703.26385498047,
+        "cvar5_daily_loss_yen": 16731.101481119793,
+        "top1_symbol_abs_pnl_share": 0.18498867064099217
+      },
+      "performance": {
+        "total_profit_yen": 22413.2080078125,
+        "final_cash": 1022413.2080078125,
+        "return_pct": 2.24132080078125,
+        "trades": 151,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 457.4124083227041,
+        "std_daily_pnl": 12703.948205565763,
+        "min_daily_pnl": -20583.30078125,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -509.31774114556725,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.1930000305175781,
+        "max_drawdown_pct_of_initial": 6.970326385498046,
+        "cvar5_daily_loss_pct_of_initial": 1.6731101481119792,
+        "top1_symbol_share": 0.18498867064099217,
+        "contrib_return": 560.3302001953125,
+        "contrib_median_pct": -173.70002746582028,
+        "contrib_drawdown_pct": -557.6261108398437,
+        "contrib_cvar_pct": -334.62202962239587,
+        "contrib_concentration": -3.6997734128198436
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.8,
+      "top_n_effective": 79,
+      "objective_score": -35613.04555063919,
+      "components": {
+        "median_daily_pnl": -1919.9996948242188,
+        "max_drawdown_yen": 68333.31146240234,
+        "cvar5_daily_loss_yen": 16681.101481119793,
+        "top1_symbol_abs_pnl_share": 0.16887996747877568
+      },
+      "performance": {
+        "total_profit_yen": 21603.231811523438,
+        "final_cash": 1021603.2318115234,
+        "return_pct": 2.160323181152344,
+        "trades": 164,
+        "n_days": 49,
+        "daily_win_rate": 0.3673469387755102,
+        "mean_daily_pnl": 440.88228186782527,
+        "std_daily_pnl": 13067.44151081509,
+        "min_daily_pnl": -20433.30078125,
+        "max_daily_pnl": 72100.00457763672
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -516.3852979172839,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.19199996948242187,
+        "max_drawdown_pct_of_initial": 6.833331146240234,
+        "cvar5_daily_loss_pct_of_initial": 1.6681101481119793,
+        "top1_symbol_share": 0.16887996747877568,
+        "contrib_return": 540.0807952880859,
+        "contrib_median_pct": -172.7999725341797,
+        "contrib_drawdown_pct": -546.6664916992188,
+        "contrib_cvar_pct": -333.62202962239587,
+        "contrib_concentration": -3.3775993495755134
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.8,
+      "top_n_effective": 68,
+      "objective_score": -37557.649164409035,
+      "components": {
+        "median_daily_pnl": -2250.006103515625,
+        "max_drawdown_yen": 64343.31359863281,
+        "cvar5_daily_loss_yen": 14761.100260416666,
+        "top1_symbol_abs_pnl_share": 0.18605193291070324
+      },
+      "performance": {
+        "total_profit_yen": 17036.558532714844,
+        "final_cash": 1017036.5585327148,
+        "return_pct": 1.7036558532714845,
+        "trades": 152,
+        "n_days": 49,
+        "daily_win_rate": 0.3469387755102041,
+        "mean_daily_pnl": 347.68486801458863,
+        "std_daily_pnl": 12688.116493146117,
+        "min_daily_pnl": -16950.0,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -590.2761386541449,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.2250006103515625,
+        "max_drawdown_pct_of_initial": 6.434331359863281,
+        "cvar5_daily_loss_pct_of_initial": 1.4761100260416666,
+        "top1_symbol_share": 0.18605193291070324,
+        "contrib_return": 425.91396331787115,
+        "contrib_median_pct": -202.50054931640625,
+        "contrib_drawdown_pct": -514.7465087890624,
+        "contrib_cvar_pct": -295.2220052083333,
+        "contrib_concentration": -3.7210386582140647
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.9,
+      "top_n_effective": 68,
+      "objective_score": -39715.917457678086,
+      "components": {
+        "median_daily_pnl": -1919.9996948242188,
+        "max_drawdown_yen": 73813.26751708984,
+        "cvar5_daily_loss_yen": 13644.43359375,
+        "top1_symbol_abs_pnl_share": 0.20634371323815828
+      },
+      "performance": {
+        "total_profit_yen": 17436.55548095703,
+        "final_cash": 1017436.555480957,
+        "return_pct": 1.743655548095703,
+        "trades": 140,
+        "n_days": 49,
+        "daily_win_rate": 0.3469387755102041,
+        "mean_daily_pnl": 355.84807103993944,
+        "std_daily_pnl": 12346.354984868221,
+        "min_daily_pnl": -15633.30078125,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -604.4077717867359,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.19199996948242187,
+        "max_drawdown_pct_of_initial": 7.3813267517089844,
+        "cvar5_daily_loss_pct_of_initial": 1.364443359375,
+        "top1_symbol_share": 0.20634371323815828,
+        "contrib_return": 435.9138870239257,
+        "contrib_median_pct": -172.7999725341797,
+        "contrib_drawdown_pct": -590.5061401367187,
+        "contrib_cvar_pct": -272.888671875,
+        "contrib_concentration": -4.126874264763166
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.6,
+      "top_n_effective": 79,
+      "objective_score": -35234.18036397459,
+      "components": {
+        "median_daily_pnl": -2470.0057983398438,
+        "max_drawdown_yen": 63946.72393798828,
+        "cvar5_daily_loss_yen": 16614.434814453125,
+        "top1_symbol_abs_pnl_share": 0.1629184876081786
+      },
+      "performance": {
+        "total_profit_yen": 17023.32305908203,
+        "final_cash": 1017023.323059082,
+        "return_pct": 1.7023323059082032,
+        "trades": 190,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 347.41475630779655,
+        "std_daily_pnl": 13282.889718184006,
+        "min_daily_pnl": -21260.003662109375,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -643.8383029186675,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.24700057983398438,
+        "max_drawdown_pct_of_initial": 6.394672393798828,
+        "cvar5_daily_loss_pct_of_initial": 1.6614434814453123,
+        "top1_symbol_share": 0.1629184876081786,
+        "contrib_return": 425.5830764770508,
+        "contrib_median_pct": -222.30052185058594,
+        "contrib_drawdown_pct": -511.57379150390625,
+        "contrib_cvar_pct": -332.28869628906244,
+        "contrib_concentration": -3.258369752163572
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.7,
+      "top_n_effective": 79,
+      "objective_score": -35200.11834836578,
+      "components": {
+        "median_daily_pnl": -2339.9871826171875,
+        "max_drawdown_yen": 66413.27209472656,
+        "cvar5_daily_loss_yen": 14614.434814453125,
+        "top1_symbol_abs_pnl_share": 0.17021993184595743
+      },
+      "performance": {
+        "total_profit_yen": 12243.252563476562,
+        "final_cash": 1012243.2525634766,
+        "return_pct": 1.224325256347656,
+        "trades": 177,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 249.8622972138074,
+        "std_daily_pnl": 12935.512058060029,
+        "min_daily_pnl": -15260.003662109375,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -731.5168040324271,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.23399871826171875,
+        "max_drawdown_pct_of_initial": 6.6413272094726565,
+        "cvar5_daily_loss_pct_of_initial": 1.4614434814453126,
+        "top1_symbol_share": 0.17021993184595743,
+        "contrib_return": 306.081314086914,
+        "contrib_median_pct": -210.59884643554688,
+        "contrib_drawdown_pct": -531.3061767578125,
+        "contrib_cvar_pct": -292.2886962890625,
+        "contrib_concentration": -3.4043986369191486
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.7,
+      "top_n_effective": 68,
+      "objective_score": -37468.73114820105,
+      "components": {
+        "median_daily_pnl": -2100.0,
+        "max_drawdown_yen": 70383.2992553711,
+        "cvar5_daily_loss_yen": 15177.766927083334,
+        "top1_symbol_abs_pnl_share": 0.18505821796588515
+      },
+      "performance": {
+        "total_profit_yen": 5406.578063964844,
+        "final_cash": 1005406.5780639648,
+        "return_pct": 0.5406578063964843,
+        "trades": 163,
+        "n_days": 49,
+        "daily_win_rate": 0.3673469387755102,
+        "mean_daily_pnl": 110.33832783601721,
+        "std_daily_pnl": 12779.358682730046,
+        "min_daily_pnl": -16950.0,
+        "max_daily_pnl": 72110.00366210938
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -924.1584453448321,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.21,
+        "max_drawdown_pct_of_initial": 7.038329925537109,
+        "cvar5_daily_loss_pct_of_initial": 1.5177766927083334,
+        "top1_symbol_share": 0.18505821796588515,
+        "contrib_return": 135.16445159912107,
+        "contrib_median_pct": -189.0,
+        "contrib_drawdown_pct": -563.0663940429688,
+        "contrib_cvar_pct": -303.5553385416667,
+        "contrib_concentration": -3.701164359317703
+      }
+    },
+    {
+      "rank_fraction": 0.35,
+      "volume_mult": 1.1,
+      "top_n_effective": 79,
+      "objective_score": -22801.47413236073,
+      "components": {
+        "median_daily_pnl": -2500.0,
+        "max_drawdown_yen": 75803.3706665039,
+        "cvar5_daily_loss_yen": 16857.778930664062,
+        "top1_symbol_abs_pnl_share": 0.07899895770552501
+      },
+      "performance": {
+        "total_profit_yen": 4553.2806396484375,
+        "final_cash": 1004553.2806396484,
+        "return_pct": 0.4553280639648437,
+        "trades": 285,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": 92.9240946867028,
+        "std_daily_pnl": 11159.384674874103,
+        "min_daily_pnl": -19050.033569335938,
+        "max_daily_pnl": 42320.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -1056.330507108212,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.25,
+        "max_drawdown_pct_of_initial": 7.58033706665039,
+        "cvar5_daily_loss_pct_of_initial": 1.6857778930664065,
+        "top1_symbol_share": 0.07899895770552501,
+        "contrib_return": 113.83201599121092,
+        "contrib_median_pct": -225.0,
+        "contrib_drawdown_pct": -606.4269653320312,
+        "contrib_cvar_pct": -337.1555786132813,
+        "contrib_concentration": -1.5799791541105002
+      }
+    },
+    {
+      "rank_fraction": 0.3,
+      "volume_mult": 1.1,
+      "top_n_effective": 68,
+      "objective_score": -25010.718237767924,
+      "components": {
+        "median_daily_pnl": -3550.0030517578125,
+        "max_drawdown_yen": 89933.33587646484,
+        "cvar5_daily_loss_yen": 15654.445393880209,
+        "top1_symbol_abs_pnl_share": 0.09071008325538045
+      },
+      "performance": {
+        "total_profit_yen": -2973.3474731445312,
+        "final_cash": 997026.6525268555,
+        "return_pct": -0.29733474731445314,
+        "trades": 262,
+        "n_days": 49,
+        "daily_win_rate": 0.3469387755102041,
+        "mean_daily_pnl": -60.680560676419006,
+        "std_daily_pnl": 11203.058695582475,
+        "min_daily_pnl": -19040.032958984375,
+        "max_daily_pnl": 42320.01953125
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -1428.203758041247,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.35500030517578124,
+        "max_drawdown_pct_of_initial": 8.993333587646484,
+        "cvar5_daily_loss_pct_of_initial": 1.565444539388021,
+        "top1_symbol_share": 0.09071008325538045,
+        "contrib_return": -74.33368682861328,
+        "contrib_median_pct": -319.5002746582031,
+        "contrib_drawdown_pct": -719.4666870117187,
+        "contrib_cvar_pct": -313.0889078776042,
+        "contrib_concentration": -1.814201665107609
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.5,
+      "top_n_effective": 56,
+      "objective_score": -15235.411708603808,
+      "components": {
+        "median_daily_pnl": -1100.0,
+        "max_drawdown_yen": 68940.01770019531,
+        "cvar5_daily_loss_yen": 13400.0,
+        "top1_symbol_abs_pnl_share": 0.049431531355291665
+      },
+      "performance": {
+        "total_profit_yen": -36510.04333496094,
+        "final_cash": 963489.9566650391,
+        "return_pct": -3.651004333496094,
+        "trades": 175,
+        "n_days": 49,
+        "daily_win_rate": 0.42857142857142855,
+        "mean_daily_pnl": -745.1029252032845,
+        "std_daily_pnl": 7063.262654816671,
+        "min_daily_pnl": -15750.0,
+        "max_daily_pnl": 16000.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -1832.2598556026917,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.11,
+        "max_drawdown_pct_of_initial": 6.894001770019531,
+        "cvar5_daily_loss_pct_of_initial": 1.34,
+        "top1_symbol_share": 0.049431531355291665,
+        "contrib_return": -912.7510833740236,
+        "contrib_median_pct": -99.0,
+        "contrib_drawdown_pct": -551.5201416015625,
+        "contrib_cvar_pct": -268.0,
+        "contrib_concentration": -0.9886306271058333
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.6,
+      "top_n_effective": 56,
+      "objective_score": -15685.095641646116,
+      "components": {
+        "median_daily_pnl": -2200.0,
+        "max_drawdown_yen": 76050.01831054688,
+        "cvar5_daily_loss_yen": 12666.666666666666,
+        "top1_symbol_abs_pnl_share": 0.047526315352130796
+      },
+      "performance": {
+        "total_profit_yen": -45590.03601074219,
+        "final_cash": 954409.9639892578,
+        "return_pct": -4.5590036010742185,
+        "trades": 163,
+        "n_days": 49,
+        "daily_win_rate": 0.40816326530612246,
+        "mean_daily_pnl": -930.408898178412,
+        "std_daily_pnl": 7183.667816230051,
+        "min_daily_pnl": -15800.0,
+        "max_daily_pnl": 16000.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -2200.434906393306,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.22,
+        "max_drawdown_pct_of_initial": 7.605001831054688,
+        "cvar5_daily_loss_pct_of_initial": 1.2666666666666666,
+        "top1_symbol_share": 0.047526315352130796,
+        "contrib_return": -1139.7509002685547,
+        "contrib_median_pct": -198.0,
+        "contrib_drawdown_pct": -608.400146484375,
+        "contrib_cvar_pct": -253.33333333333331,
+        "contrib_concentration": -0.950526307042616
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.7,
+      "top_n_effective": 56,
+      "objective_score": -17821.21938496254,
+      "components": {
+        "median_daily_pnl": -1729.9957275390625,
+        "max_drawdown_yen": 71970.03631591797,
+        "cvar5_daily_loss_yen": 14333.333333333334,
+        "top1_symbol_abs_pnl_share": 0.05935310653241357
+      },
+      "performance": {
+        "total_profit_yen": -54000.05645751953,
+        "final_cash": 945999.9435424805,
+        "return_pct": -5.400005645751953,
+        "trades": 155,
+        "n_days": 49,
+        "daily_win_rate": 0.3877551020408163,
+        "mean_daily_pnl": -1102.0419685208067,
+        "std_daily_pnl": 7025.989705055562,
+        "min_daily_pnl": -15800.0,
+        "max_daily_pnl": 16000.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -2369.3150462411627,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.17299957275390623,
+        "max_drawdown_pct_of_initial": 7.197003631591797,
+        "cvar5_daily_loss_pct_of_initial": 1.4333333333333333,
+        "top1_symbol_share": 0.05935310653241357,
+        "contrib_return": -1350.0014114379883,
+        "contrib_median_pct": -155.6996154785156,
+        "contrib_drawdown_pct": -575.7602905273437,
+        "contrib_cvar_pct": -286.6666666666667,
+        "contrib_concentration": -1.1870621306482714
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.9,
+      "top_n_effective": 56,
+      "objective_score": -23325.81658808139,
+      "components": {
+        "median_daily_pnl": -1650.0,
+        "max_drawdown_yen": 73680.04302978516,
+        "cvar5_daily_loss_yen": 22166.666666666668,
+        "top1_symbol_abs_pnl_share": 0.07046919494559412
+      },
+      "performance": {
+        "total_profit_yen": -59450.074768066406,
+        "final_cash": 940549.9252319336,
+        "return_pct": -5.945007476806641,
+        "trades": 128,
+        "n_days": 49,
+        "daily_win_rate": 0.3469387755102041,
+        "mean_daily_pnl": -1213.2668320013552,
+        "std_daily_pnl": 8725.185429468675,
+        "min_daily_pnl": -46850.0,
+        "max_daily_pnl": 17000.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -2668.934930672187,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.165,
+        "max_drawdown_pct_of_initial": 7.368004302978516,
+        "cvar5_daily_loss_pct_of_initial": 2.216666666666667,
+        "top1_symbol_share": 0.07046919494559412,
+        "contrib_return": -1486.2518692016602,
+        "contrib_median_pct": -148.5,
+        "contrib_drawdown_pct": -589.4403442382813,
+        "contrib_cvar_pct": -443.33333333333337,
+        "contrib_concentration": -1.4093838989118823
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 1.8,
+      "top_n_effective": 56,
+      "objective_score": -23098.517953907616,
+      "components": {
+        "median_daily_pnl": -1500.0,
+        "max_drawdown_yen": 74470.0668334961,
+        "cvar5_daily_loss_yen": 24350.0,
+        "top1_symbol_abs_pnl_share": 0.06267451289238378
+      },
+      "performance": {
+        "total_profit_yen": -61400.071716308594,
+        "final_cash": 938599.9282836914,
+        "return_pct": -6.1400071716308595,
+        "trades": 138,
+        "n_days": 49,
+        "daily_win_rate": 0.3673469387755102,
+        "mean_daily_pnl": -1253.0626880879304,
+        "std_daily_pnl": 9154.965216878642,
+        "min_daily_pnl": -46850.0,
+        "max_daily_pnl": 17000.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -2754.0158178335314,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.15,
+        "max_drawdown_pct_of_initial": 7.447006683349609,
+        "cvar5_daily_loss_pct_of_initial": 2.435,
+        "top1_symbol_share": 0.06267451289238378,
+        "contrib_return": -1535.0017929077148,
+        "contrib_median_pct": -135.0,
+        "contrib_drawdown_pct": -595.7605346679687,
+        "contrib_cvar_pct": -487.0,
+        "contrib_concentration": -1.2534902578476756
+      }
+    },
+    {
+      "rank_fraction": 0.25,
+      "volume_mult": 2.0,
+      "top_n_effective": 56,
+      "objective_score": -26125.119342735394,
+      "components": {
+        "median_daily_pnl": -1400.0,
+        "max_drawdown_yen": 90139.990234375,
+        "cvar5_daily_loss_yen": 26783.333333333332,
+        "top1_symbol_abs_pnl_share": 0.07537607119332276
+      },
+      "performance": {
+        "total_profit_yen": -56110.02197265625,
+        "final_cash": 943889.9780273438,
+        "return_pct": -5.611002197265625,
+        "trades": 116,
+        "n_days": 49,
+        "daily_win_rate": 0.3673469387755102,
+        "mean_daily_pnl": -1145.1024892378828,
+        "std_daily_pnl": 10535.096774391739,
+        "min_daily_pnl": -58150.0,
+        "max_daily_pnl": 19800.0
+      },
+      "weights": {
+        "lambda_mdd": 0.0003,
+        "lambda_cvar": 0.5,
+        "lambda_conc": 0.15
+      },
+      "profit_focused_score": -2787.044659281939,
+      "score_mode": "ratio_of_initial",
+      "score_breakdown": {
+        "median_daily_pct_of_initial": -0.13999999999999999,
+        "max_drawdown_pct_of_initial": 9.0139990234375,
+        "cvar5_daily_loss_pct_of_initial": 2.6783333333333332,
+        "top1_symbol_share": 0.07537607119332276,
+        "contrib_return": -1402.7505493164062,
+        "contrib_median_pct": -125.99999999999999,
+        "contrib_drawdown_pct": -721.1199218749999,
+        "contrib_cvar_pct": -535.6666666666666,
+        "contrib_concentration": -1.5075214238664554
+      }
+    }
+  ]
+}

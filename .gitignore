@@ -1,0 +1,23 @@
+venv/
+__pycache__/
+*.csv
+*.txt
+*.sqlite
+.DS_Store
+.env
+
+# 認証情報（APIパスワード・取引パスワードを含む）
+kabu_config.json
+
+# 実行時に生成される状態ファイル
+kabu_trader_state.json
+jp_param_search_state.json
+earnings_cache.json
+
+# ログ（口座残高・約定情報を含むためコミットしない）
+*.log
+kabu_logs/
+
+# 一時解析スクリプト・結果
+_*.py
+_*.json
