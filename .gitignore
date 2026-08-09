@@ -21,3 +21,12 @@ kabu_logs/
 # 一時解析スクリプト・結果
 _*.py
 _*.json
+
+# 探索・検証の生成結果（ソースではない）
+*_results.json
+*_analysis.json
+*_sweep*.json
+sim_trade_stats.json
+one_mult_diagnostics.json
+jp_weight_profile_comparison.json
+jp_scheduled_param_search_result.json

@@ -174,8 +174,8 @@ python analyze_sim_trades.py
 | `jp_objective_sweep.py` | スコア計算の補助（MDD・集中度など） |
 | `run_jp_scheduled_daily.bat` | 日次パラメータ探索の起動 |
 | `run_jp_scheduled_weekly.bat` | 週次フル探索の起動 |
-| `jp_param_search_state.json` | 探索の状態（前回ベスト `rank_fraction` / `volume_mult`） |
-| `jp_scheduled_param_search_result.json` | 直近実行の詳細結果 |
+| `jp_param_search_state.json` | 探索の状態（前回ベスト `rank_fraction` / `volume_mult`）。実行時生成・Git管理外 |
+| `jp_scheduled_param_search_result.json` | 直近実行の詳細結果。実行時生成・Git管理外 |
 
 ### 4.3 分析・レポート補助
 
@@ -198,9 +198,9 @@ python analyze_sim_trades.py
 | `jp_scheduled_param_search.log` | パラメータ探索バッチのログ |
 | `earnings_cache.json` | 決算日情報のキャッシュ（銘柄選定で決算回避に使用） |
 
-### 4.5 参照のみ（日次必須ではない）
+### 4.5 リポジトリに含めないもの
 
-研究・検証用スクリプト（`us_*`, `walkforward_*`, `virtual_bot.py` など）は日次売買の起動には不要です。
+研究・検証用の旧スクリプト（米国市場スイープ、walkforward、virtual_bot など）と、探索結果 JSON は Git 管理外です。
 
 ---
 
