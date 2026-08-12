@@ -3,6 +3,7 @@ venv/
 __pycache__/
 *.csv
 *.txt
+!regime_switch_strategy_report_ja.txt
 *.sqlite
 .DS_Store
 .env
