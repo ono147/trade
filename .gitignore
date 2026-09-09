@@ -1,10 +1,14 @@
 venv/
+.venv/
 __pycache__/
 *.csv
 *.txt
+!regime_switch_strategy_report_ja.txt
 *.sqlite
 .DS_Store
 .env
+.env.*
+!.env.example
 
 # 認証情報（APIパスワード・取引パスワードを含む）
 kabu_config.json
