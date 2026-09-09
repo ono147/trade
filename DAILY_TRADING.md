@@ -83,6 +83,12 @@ pip install pandas numpy yfinance scipy requests beautifulsoup4
 run_kabu_trader.bat
 ```
 
+互換エイリアス（同等）:
+
+```bat
+run_trade.bat
+```
+
 内部で実行されるコマンド:
 
 ```bash
@@ -164,6 +170,8 @@ python analyze_sim_trades.py
 | `simulation_realistic.py` | **バックテスト／戦略の単一ソース**。銘柄選定・セッション制限・EMAロジックをライブと共有 |
 | `nikkei225_list.py` | 日経225 225銘柄のティッカー・社名リスト |
 | `run_kabu_trader.bat` | 本番ライブ起動用バッチ |
+| `run_trade.bat` | `run_kabu_trader.bat` を本番モードで呼ぶエイリアス |
+| `run_trade_signal_only.bat` | シグナル確認専用の起動バッチ（発注なし） |
 
 ### 4.2 パラメータ最適化（日次運用で推奨）
 
@@ -257,10 +265,11 @@ python analyze_sim_trades.py
 | タスク名 | 実行ファイル | 推奨時刻 | 備考 |
 |----------|--------------|----------|------|
 | JP Param Search Daily | `run_jp_scheduled_daily.bat` | 平日 6:00 | データ更新後・売買前 |
-| Kabu Live Trader | `run_kabu_trader.bat` | 平日 8:25 | kabuステーション起動後 |
+| Kabu Signal Check | `run_trade_signal_only.bat` | 平日 8:55 | 発注なしの事前ヘルスチェック |
+| Kabu Live Trader | `run_trade.bat` | 平日 9:00 | kabuステーション起動後 |
 | Kabu Live Trader (週次探索) | `run_jp_scheduled_weekly.bat` | 土曜 9:00 など | 週1回で十分な場合 |
 
-`.bat` 内の Python パス（`C:\Users\...\Python311\python.exe`）は環境に合わせて変更してください。
+一括登録は `setup_windows_tasks.bat` を1回実行するだけで作成できます。
 
 ---
 
