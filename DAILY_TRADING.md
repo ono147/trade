@@ -1,8 +1,8 @@
 # 日次売買オペレーションガイド
 
-日経225構成銘柄を対象に、EMAゴールデンクロス＋出来高急増でエントリーし、デッドクロス・ストップロス・TimeLimitで決済する **本番ライブ売買** の手順とファイル構成をまとめたドキュメントです。
+日経225構成銘柄を対象に、相場レジーム（TREND/RANGE/NEUTRAL）で順張り・逆張りを切り替える **本番ライブ売買** の手順とファイル構成をまとめたドキュメントです。
 
-戦略ロジックは `simulation_realistic.py`（バックテスト）と `kabu_trader.py`（ライブ）で共通化されています。
+`kabu_trader.py`（ライブ）は運用向けにレジーム切替ロジックを搭載しています。`simulation_realistic.py` は比較用のベースライン検証として併用してください。
 
 ---
 
@@ -63,13 +63,19 @@ pip install pandas numpy yfinance scipy requests beautifulsoup4
 | `is_production` | `true` で本番 URL を使用（`--production` と併用） |
 | `account_type` | 口座種別（4=特定 など） |
 | `rank_fraction` | 監視銘柄の上位比率（例: 0.48 → 225銘柄中約108銘柄） |
-| `volume_mult` | 出来高が20本平均の何倍以上でエントリーするか（例: 1.38） |
-| `stop_loss_pct` | ストップロス幅（例: 0.005 = 0.5%） |
+| `enable_regime_switch` | `true` でTREND/RANGE/NEUTRAL切替を有効化 |
+| `trend_volume_mult` | TRENDモードでの出来高倍率（20本平均比、例: 1.38） |
+| `trend_ema_gap_min` | TRENDモードで必要なEMA乖離率（例: 0.0008） |
+| `trend_stop_loss_pct` | TRENDモードのストップロス（例: 0.005 = 0.5%） |
+| `range_rsi_entry` | RANGEモードの買いエントリー閾値（RSI、例: 30） |
+| `range_rsi_exit` | RANGEモードの利確・撤退閾値（RSI、例: 52） |
+| `range_atr_stop_mult` | RANGEモードのATR損切係数（例: 0.5） |
+| `range_max_hold_bars` | RANGEモードの最大保有バー数（例: 26本） |
 | `max_position_value_pct` | 1回の買いに使う買付可能額の上限比率（1.0=全額） |
 | `max_lot_value_yen` | 100株想定購入金額の上限（超える銘柄は選定除外） |
 | `yf_period` | yfinance 取得期間（既定 `59d`） |
 
-現在の運用パラメータ例: `rank_fraction=0.48`, `volume_mult=1.38`
+現在の運用パラメータ例: `rank_fraction=0.48`, `trend_volume_mult=1.38`, `enable_regime_switch=true`
 
 ---
 
@@ -173,10 +179,10 @@ python analyze_sim_trades.py
 
 | ファイル | 役割 |
 |----------|------|
-| `kabu_trader.py` | **ライブトレーダー本体**。板情報から5分足を構築し、GC/DC・出来高・SL・TimeLimit で売買。終了時に約定照会で損益を補正 |
+| `kabu_trader.py` | **ライブトレーダー本体**。板情報から5分足を構築し、レジーム判定（TREND/RANGE/NEUTRAL）に応じて順張り/逆張りを切替売買。終了時に約定照会で損益を補正 |
 | `kabu_api.py` | kabuステーション REST API ラッパー（認証・発注・板情報・余力・約定照会） |
 | `kabu_config.json` | API接続・戦略パラメータ・口座設定 |
-| `simulation_realistic.py` | **バックテスト／戦略の単一ソース**。銘柄選定・セッション制限・EMAロジックをライブと共有 |
+| `simulation_realistic.py` | ベースラインバックテスト。銘柄選定・セッション制限の検証に利用 |
 | `nikkei225_list.py` | 日経225 225銘柄のティッカー・社名リスト |
 | `run_kabu_trader.bat` | 本番ライブ起動用バッチ |
 | `run_trade.bat` | `run_kabu_trader.bat` を本番モードで呼ぶエイリアス |
@@ -227,15 +233,17 @@ python analyze_sim_trades.py
 
 1. `kabu_config.json` を読み込み、API 認証
 2. **プレマーケット選定**: 前日までの yfinance データでモメンタム順位 → 上位 `rank_fraction` を監視候補に（最大135銘柄）
-3. **EMA ウォームアップ**: 板情報バッチ取得で5分足履歴を構築
+3. **指標ウォームアップ**: 板情報バッチ取得で5分足履歴を構築（EMA/RSI/ATR/ADX/BB幅）
 4. **トレーディングループ**（20秒周期・板は45銘柄×3バッチでローテーション）:
-   - 5分足確定時: 全銘柄の EMA 更新 → **全決済** → **全エントリー**（シミュと同順序）
+   - 5分足確定時: 全銘柄の指標更新 → レジーム判定 → **全決済** → **全エントリー**
+   - TREND: 1本確認GC + EMA乖離 + 出来高
+   - RANGE: RSI逆張り + ATR損切 + RSI/時間決済
    - 成行発注（SOR 市場コード 9）
 5. **終了処理**（15:30）: 約定照会で entry/exit/pnl を実値に更新 → `summary_*.json` / `trades_*.jsonl` 保存
 
 ### `simulation_realistic.py`（バックテスト）
 
-- yfinance の5分足で同一戦略を過去日に適用
+- yfinance の5分足でベースライン戦略を過去日に適用
 - `run_daily_selection`, `is_entry_blocked_by_session`, `is_time_limit_session` 等をライブから import
 - パラメータ探索・当日比較・長期検証の基盤
 

@@ -1,7 +1,12 @@
 """
 kabuステーションAPI を利用したライブトレーダー。
-simulation_realistic.py と同じ EMA GC/DC + 出来高急増戦略を、
-5分足確定（東証グリッド）でのみエントリー/決済するリアルタイムトレーダー。
+5分足確定（東証グリッド）でのみ判定するリアルタイムトレーダー。
+
+現行ロジック:
+- 相場レジーム (TREND / RANGE / NEUTRAL) を判定
+- TREND: GC + 1本確認 + 乖離率 + 出来高で順張り
+- RANGE: RSI逆張りで押し目買い
+- 各モードごとに専用の決済ルールを適用
 
 使い方:
   python kabu_trader.py                     # 検証環境（デフォルト）
@@ -82,6 +87,9 @@ class LivePosition:
     entry_price: float
     entry_time: datetime
     order_id: str = ""
+    strategy_mode: str = "TREND"
+    entry_atr: float = 0.0
+    entry_bar_count: int = 0
 
 
 @dataclass
@@ -99,6 +107,9 @@ class BarAccumulator:
 class FinalizedBar:
     """確定した5分足1本（シミュの1タイムスタンプに相当）"""
     ss: SymbolState
+    open: float
+    high: float
+    low: float
     close: float
     volume: float
     bar_start: datetime
@@ -110,10 +121,21 @@ class SymbolState:
     name: str
     ema5: float = 0.0
     ema15: float = 0.0
+    ema20: float = 0.0
     prev_ema5: float = 0.0
     prev_ema15: float = 0.0
+    prev_ema20: float = 0.0
+    rsi14: float = float("nan")
+    atr14: float = float("nan")
+    adx14: float = float("nan")
+    bbw_pct: float = float("nan")
+    slope_atr: float = float("nan")
     vol_ma20: float = 0.0
+    close_history: list[float] = field(default_factory=list)
+    high_history: list[float] = field(default_factory=list)
+    low_history: list[float] = field(default_factory=list)
     vol_history: list = field(default_factory=list)
+    gc_signal_age: int = -1
     bar_count: int = 0
     current_bar: BarAccumulator = field(default_factory=BarAccumulator)
     last_price: float = 0.0
@@ -157,10 +179,31 @@ class KabuTrader:
         self.rank_fraction: float = raw.get("rank_fraction", 0.49)
         self.volume_mult: float = raw.get("volume_mult", 1.38)
         self.stop_loss_pct: float = raw.get("stop_loss_pct", 0.005)
+        self.enable_regime_switch: bool = bool(raw.get("enable_regime_switch", True))
+        self.regime_confirm_bars: int = int(raw.get("regime_confirm_bars", 3))
+        self.regime_exit_bars: int = int(raw.get("regime_exit_bars", 2))
+        self.regime_adx_threshold: float = float(raw.get("regime_adx_threshold", 20.0))
+        self.regime_slope_atr_threshold: float = float(raw.get("regime_slope_atr_threshold", 0.20))
+        self.regime_breadth_trend: float = float(raw.get("regime_breadth_trend", 0.62))
+        self.regime_breadth_range_low: float = float(raw.get("regime_breadth_range_low", 0.42))
+        self.regime_breadth_range_high: float = float(raw.get("regime_breadth_range_high", 0.58))
+        self.regime_bbw_pct_threshold: float = float(raw.get("regime_bbw_pct_threshold", 0.30))
+        self.regime_bbw_window: int = int(raw.get("regime_bbw_window", 80))
+
+        self.trend_volume_mult: float = float(raw.get("trend_volume_mult", self.volume_mult))
+        self.trend_stop_loss_pct: float = float(raw.get("trend_stop_loss_pct", self.stop_loss_pct))
+        self.trend_ema_gap_min: float = float(raw.get("trend_ema_gap_min", 0.0008))
+
+        self.range_rsi_entry: float = float(raw.get("range_rsi_entry", 30.0))
+        self.range_rsi_exit: float = float(raw.get("range_rsi_exit", 52.0))
+        self.range_atr_stop_mult: float = float(raw.get("range_atr_stop_mult", 0.5))
+        self.range_max_hold_bars: int = int(raw.get("range_max_hold_bars", 26))
+
         self.max_position_value_pct: float = float(raw.get("max_position_value_pct", 1.0))
         self.oneshot_max_yen: float = float(raw.get("oneshot_max_yen", 500_000))
         self.max_lot_value_yen: float = float(raw.get("max_lot_value_yen", 500_000))
         self.yf_period: str = raw.get("yf_period", "59d")
+        self.indicator_maxlen: int = max(260, self.regime_bbw_window + 40)
 
         self.positions: dict[str, LivePosition] = {}
         self.symbol_states: dict[str, SymbolState] = {}
@@ -168,6 +211,10 @@ class KabuTrader:
         self.trade_logs: list[dict] = []
         self.available_cash: float = 0.0
         self.top_n: int = 0
+        self.regime_mode: str = "NEUTRAL" if self.enable_regime_switch else "TREND"
+        self.regime_trend_streak: int = 0
+        self.regime_range_streak: int = 0
+        self.regime_reverse_streak: int = 0
 
         self.is_production = production
         self._today_str: str = ""
@@ -223,6 +270,9 @@ class KabuTrader:
                     "entry_price": p.entry_price,
                     "entry_time": p.entry_time.isoformat(),
                     "order_id": p.order_id,
+                    "strategy_mode": p.strategy_mode,
+                    "entry_atr": p.entry_atr,
+                    "entry_bar_count": p.entry_bar_count,
                 }
                 for sym, p in self.positions.items()
             },
@@ -321,6 +371,9 @@ class KabuTrader:
                 entry_price=avg_price,
                 entry_time=self._now(),
                 order_id="SYNC",
+                strategy_mode="TREND",
+                entry_atr=0.0,
+                entry_bar_count=0,
             )
             logger.info("  保有: %s %s %d株 取得単価≈%.1f", sym, name, qty, avg_price)
 
@@ -360,8 +413,8 @@ class KabuTrader:
         idx_n = len(NIKKEI225)
         self.top_n = compute_rank_top_n(idx_n, self.rank_fraction, None)
         logger.info(
-            "パラメータ: rank_fraction=%.2f, volume_mult=%.2f, top_n=%d",
-            self.rank_fraction, self.volume_mult, self.top_n,
+            "パラメータ: rank_fraction=%.2f, trend_volume_mult=%.2f, top_n=%d",
+            self.rank_fraction, self.trend_volume_mult, self.top_n,
         )
 
         symbols = [s[0] for s in NIKKEI225]
@@ -448,24 +501,30 @@ class KabuTrader:
             close_s = df["Close"]
             if isinstance(close_s, pd.DataFrame):
                 close_s = close_s.iloc[:, 0]
+            high_s = df["High"]
+            if isinstance(high_s, pd.DataFrame):
+                high_s = high_s.iloc[:, 0]
+            low_s = df["Low"]
+            if isinstance(low_s, pd.DataFrame):
+                low_s = low_s.iloc[:, 0]
             vol_s = df["Volume"]
             if isinstance(vol_s, pd.DataFrame):
                 vol_s = vol_s.iloc[:, 0]
 
-            ema5 = close_s.ewm(span=5, adjust=False).mean()
-            ema15 = close_s.ewm(span=15, adjust=False).mean()
-            vol_ma20 = vol_s.rolling(window=20, min_periods=5).mean()
-
             ss = SymbolState(code=sym_code, name=sym_name)
-            ss.ema5 = float(ema5.iloc[-1])
-            ss.ema15 = float(ema15.iloc[-1])
-            ss.prev_ema5 = float(ema5.iloc[-2]) if len(ema5) >= 2 else ss.ema5
-            ss.prev_ema15 = float(ema15.iloc[-2]) if len(ema15) >= 2 else ss.ema15
-            ss.vol_ma20 = float(vol_ma20.iloc[-1]) if pd.notna(vol_ma20.iloc[-1]) else 0.0
-            recent_vols = vol_s.iloc[-20:].tolist()
-            ss.vol_history = [float(v) for v in recent_vols if pd.notna(v)]
-            ss.bar_count = len(close_s)
-            ss.last_price = float(close_s.iloc[-1])
+            hist_df = pd.DataFrame(
+                {"close": close_s, "high": high_s, "low": low_s, "volume": vol_s}
+            ).dropna()
+            if hist_df.empty:
+                continue
+            hist_df = hist_df.tail(self.indicator_maxlen)
+            ss.close_history = hist_df["close"].astype(float).tolist()
+            ss.high_history = hist_df["high"].astype(float).tolist()
+            ss.low_history = hist_df["low"].astype(float).tolist()
+            ss.vol_history = hist_df["volume"].astype(float).tail(20).tolist()
+            ss.bar_count = len(ss.close_history)
+            ss.last_price = float(hist_df["close"].iloc[-1])
+            self._recompute_symbol_indicators(ss)
 
             self.symbol_states[sym_code] = ss
 
@@ -567,7 +626,6 @@ class KabuTrader:
                 ss.last_volume_cumulative = cum_f
 
         now = self._now()
-        slot = self._five_min_slot(now)
         for ss in self.symbol_states.values():
             self._maybe_finalize_to_pending(ss, pending, now)
         n_finalized = len(pending)
@@ -589,6 +647,9 @@ class KabuTrader:
         pending.append(
             FinalizedBar(
                 ss=ss,
+                open=bar.open,
+                high=bar.high,
+                low=bar.low,
                 close=bar.close,
                 volume=bar.volume,
                 bar_start=bar.bar_start,
@@ -617,25 +678,209 @@ class KabuTrader:
             bar.close = price
             bar.volume += bar_vol
 
-    def _apply_ema_from_bar_close(
-        self, ss: SymbolState, close: float, volume: float
-    ) -> None:
-        ss.prev_ema5 = ss.ema5
-        ss.prev_ema15 = ss.ema15
-        alpha5 = 2.0 / (5 + 1)
-        alpha15 = 2.0 / (15 + 1)
-        ss.ema5 = alpha5 * close + (1 - alpha5) * ss.ema5
-        ss.ema15 = alpha15 * close + (1 - alpha15) * ss.ema15
+    def _rsi_last(self, close_s: pd.Series, period: int = 14) -> float:
+        delta = close_s.diff()
+        up = delta.clip(lower=0.0)
+        down = -delta.clip(upper=0.0)
+        avg_up = up.ewm(alpha=1.0 / period, adjust=False, min_periods=period).mean()
+        avg_down = down.ewm(alpha=1.0 / period, adjust=False, min_periods=period).mean()
+        rs = avg_up / avg_down.replace(0, np.nan)
+        rsi = 100.0 - (100.0 / (1.0 + rs))
+        last = rsi.iloc[-1]
+        if pd.notna(last):
+            return float(last)
+        if len(close_s) < 2:
+            return float("nan")
+        d = close_s.diff().iloc[-period:].dropna()
+        if len(d) == 0:
+            return float("nan")
+        if (d >= 0).all():
+            return 100.0
+        if (d <= 0).all():
+            return 0.0
+        return float("nan")
 
-        ss.vol_history.append(volume)
+    def _recompute_symbol_indicators(self, ss: SymbolState) -> None:
+        if not ss.close_history:
+            return
+        close_s = pd.Series(ss.close_history, dtype="float64")
+        high_s = pd.Series(ss.high_history, dtype="float64")
+        low_s = pd.Series(ss.low_history, dtype="float64")
+
+        ema5_s = close_s.ewm(span=5, adjust=False).mean()
+        ema15_s = close_s.ewm(span=15, adjust=False).mean()
+        ema20_s = close_s.ewm(span=20, adjust=False).mean()
+        ss.prev_ema5 = float(ema5_s.iloc[-2]) if len(ema5_s) >= 2 else float(ema5_s.iloc[-1])
+        ss.prev_ema15 = float(ema15_s.iloc[-2]) if len(ema15_s) >= 2 else float(ema15_s.iloc[-1])
+        ss.prev_ema20 = float(ema20_s.iloc[-2]) if len(ema20_s) >= 2 else float(ema20_s.iloc[-1])
+        ss.ema5 = float(ema5_s.iloc[-1])
+        ss.ema15 = float(ema15_s.iloc[-1])
+        ss.ema20 = float(ema20_s.iloc[-1])
+
+        vol_s = pd.Series(ss.vol_history[-20:], dtype="float64")
+        vol_ma20_s = vol_s.rolling(window=20, min_periods=5).mean()
+        ss.vol_ma20 = float(vol_ma20_s.iloc[-1]) if len(vol_ma20_s) and pd.notna(vol_ma20_s.iloc[-1]) else 0.0
+
+        ss.rsi14 = self._rsi_last(close_s, period=14)
+
+        prev_close = close_s.shift(1)
+        tr = pd.concat(
+            [
+                (high_s - low_s).abs(),
+                (high_s - prev_close).abs(),
+                (low_s - prev_close).abs(),
+            ],
+            axis=1,
+        ).max(axis=1)
+        atr_s = tr.ewm(alpha=1.0 / 14.0, adjust=False, min_periods=14).mean()
+        ss.atr14 = float(atr_s.iloc[-1]) if len(atr_s) and pd.notna(atr_s.iloc[-1]) else float("nan")
+
+        up_move = high_s.diff()
+        down_move = -low_s.diff()
+        plus_dm = pd.Series(
+            np.where((up_move > down_move) & (up_move > 0), up_move, 0.0),
+            dtype="float64",
+        )
+        minus_dm = pd.Series(
+            np.where((down_move > up_move) & (down_move > 0), down_move, 0.0),
+            dtype="float64",
+        )
+        atr_safe = atr_s.replace(0, np.nan)
+        plus_di = 100.0 * plus_dm.ewm(alpha=1.0 / 14.0, adjust=False, min_periods=14).mean() / atr_safe
+        minus_di = 100.0 * minus_dm.ewm(alpha=1.0 / 14.0, adjust=False, min_periods=14).mean() / atr_safe
+        dx = (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, np.nan) * 100.0
+        adx_s = dx.ewm(alpha=1.0 / 14.0, adjust=False, min_periods=14).mean()
+        ss.adx14 = float(adx_s.iloc[-1]) if len(adx_s) and pd.notna(adx_s.iloc[-1]) else float("nan")
+
+        bb_mid = close_s.rolling(window=20, min_periods=20).mean()
+        bb_std = close_s.rolling(window=20, min_periods=20).std(ddof=0)
+        bb_width = (4.0 * bb_std) / bb_mid.replace(0, np.nan)
+        bbw_curr = bb_width.iloc[-1] if len(bb_width) else np.nan
+        bbw_hist = bb_width.tail(max(20, self.regime_bbw_window)).dropna()
+        if pd.notna(bbw_curr) and len(bbw_hist) >= 20:
+            ss.bbw_pct = float((bbw_hist <= bbw_curr).mean())
+        else:
+            ss.bbw_pct = float("nan")
+
+        if pd.notna(ss.atr14) and ss.atr14 > 0 and pd.notna(ss.prev_ema20):
+            ss.slope_atr = float(abs(ss.ema20 - ss.prev_ema20) / ss.atr14)
+        else:
+            ss.slope_atr = float("nan")
+
+        if self._check_golden_cross(ss):
+            ss.gc_signal_age = 0
+        elif ss.gc_signal_age >= 0 and ss.ema5 > ss.ema15:
+            ss.gc_signal_age += 1
+        else:
+            ss.gc_signal_age = -1
+
+    def _apply_indicators_from_bar(self, fb: FinalizedBar) -> None:
+        ss = fb.ss
+        ss.close_history.append(float(fb.close))
+        ss.high_history.append(float(fb.high))
+        ss.low_history.append(float(fb.low))
+        ss.vol_history.append(float(fb.volume))
+        if len(ss.close_history) > self.indicator_maxlen:
+            ss.close_history = ss.close_history[-self.indicator_maxlen:]
+            ss.high_history = ss.high_history[-self.indicator_maxlen:]
+            ss.low_history = ss.low_history[-self.indicator_maxlen:]
         if len(ss.vol_history) > 20:
             ss.vol_history = ss.vol_history[-20:]
-        if len(ss.vol_history) >= 5:
-            ss.vol_ma20 = float(np.mean(ss.vol_history))
         ss.bar_count += 1
+        self._recompute_symbol_indicators(ss)
+
+    def _market_regime_snapshot(self) -> dict[str, float]:
+        breadth_flags = []
+        adx_vals = []
+        slope_vals = []
+        bbw_vals = []
+        for ss in self.symbol_states.values():
+            if ss.ema5 > 0 and ss.ema15 > 0:
+                breadth_flags.append(1.0 if ss.ema5 > ss.ema15 else 0.0)
+            if pd.notna(ss.adx14):
+                adx_vals.append(ss.adx14)
+            if pd.notna(ss.slope_atr):
+                slope_vals.append(ss.slope_atr)
+            if pd.notna(ss.bbw_pct):
+                bbw_vals.append(ss.bbw_pct)
+        breadth = float(np.mean(breadth_flags)) if breadth_flags else float("nan")
+        adx = float(np.mean(adx_vals)) if adx_vals else float("nan")
+        slope = float(np.mean(slope_vals)) if slope_vals else float("nan")
+        bbw_pct = float(np.mean(bbw_vals)) if bbw_vals else float("nan")
+
+        trend_votes = 0
+        range_votes = 0
+        if pd.notna(adx) and adx > self.regime_adx_threshold:
+            trend_votes += 1
+        if pd.notna(slope) and slope > self.regime_slope_atr_threshold:
+            trend_votes += 1
+        if pd.notna(breadth) and breadth > self.regime_breadth_trend:
+            trend_votes += 1
+
+        if pd.notna(adx) and adx < self.regime_adx_threshold:
+            range_votes += 1
+        if pd.notna(bbw_pct) and bbw_pct < self.regime_bbw_pct_threshold:
+            range_votes += 1
+        if pd.notna(breadth) and self.regime_breadth_range_low <= breadth <= self.regime_breadth_range_high:
+            range_votes += 1
+
+        return {
+            "breadth": breadth,
+            "adx": adx,
+            "slope_atr": slope,
+            "bbw_pct": bbw_pct,
+            "trend_votes": float(trend_votes),
+            "range_votes": float(range_votes),
+        }
+
+    def _update_regime_mode(self, snap: dict[str, float], bar_start: datetime) -> None:
+        if not self.enable_regime_switch:
+            self.regime_mode = "TREND"
+            return
+
+        trend_ok = snap["trend_votes"] >= 2
+        range_ok = snap["range_votes"] >= 2
+        prev_mode = self.regime_mode
+
+        if self.regime_mode == "NEUTRAL":
+            self.regime_trend_streak = self.regime_trend_streak + 1 if trend_ok else 0
+            self.regime_range_streak = self.regime_range_streak + 1 if range_ok else 0
+            if self.regime_trend_streak >= self.regime_confirm_bars:
+                self.regime_mode = "TREND"
+                self.regime_reverse_streak = 0
+            elif self.regime_range_streak >= self.regime_confirm_bars:
+                self.regime_mode = "RANGE"
+                self.regime_reverse_streak = 0
+        elif self.regime_mode == "TREND":
+            self.regime_reverse_streak = self.regime_reverse_streak + 1 if range_ok else 0
+            if self.regime_reverse_streak >= self.regime_exit_bars:
+                self.regime_mode = "NEUTRAL"
+                self.regime_trend_streak = 0
+                self.regime_range_streak = 0
+                self.regime_reverse_streak = 0
+        elif self.regime_mode == "RANGE":
+            self.regime_reverse_streak = self.regime_reverse_streak + 1 if trend_ok else 0
+            if self.regime_reverse_streak >= self.regime_exit_bars:
+                self.regime_mode = "NEUTRAL"
+                self.regime_trend_streak = 0
+                self.regime_range_streak = 0
+                self.regime_reverse_streak = 0
+
+        logger.info(
+            "Regime %s @%s | mode=%s trend_votes=%d range_votes=%d breadth=%.2f adx=%.1f slope_atr=%.3f bbw_pct=%.2f",
+            "switch" if prev_mode != self.regime_mode else "check",
+            bar_start.strftime("%H:%M"),
+            self.regime_mode,
+            int(snap["trend_votes"]),
+            int(snap["range_votes"]),
+            snap["breadth"] if pd.notna(snap["breadth"]) else float("nan"),
+            snap["adx"] if pd.notna(snap["adx"]) else float("nan"),
+            snap["slope_atr"] if pd.notna(snap["slope_atr"]) else float("nan"),
+            snap["bbw_pct"] if pd.notna(snap["bbw_pct"]) else float("nan"),
+        )
 
     def _process_pending_bar_cycle(self, pending: list[FinalizedBar]) -> None:
-        """確定足ごとに EMA更新→全銘柄決済→全銘柄エントリー（sim のタイムスタンプループと同順）。"""
+        """確定足ごとに 指標更新→レジーム判定→全銘柄決済→全銘柄エントリー。"""
         if not pending:
             return
         code_order = {s[0]: i for i, s in enumerate(self.target_stocks)}
@@ -648,7 +893,8 @@ class KabuTrader:
             batch.sort(key=lambda fb: code_order.get(fb.ss.code, 9999))
 
             for fb in batch:
-                self._apply_ema_from_bar_close(fb.ss, fb.close, fb.volume)
+                self._apply_indicators_from_bar(fb)
+            self._update_regime_mode(self._market_regime_snapshot(), bar_start)
             for fb in batch:
                 self._process_bar_exits(fb.ss, fb.close, bar_start)
             if is_time_limit_session(bar_start, JP_SESSION):
@@ -666,13 +912,34 @@ class KabuTrader:
             logger.info("TimeLimit(5分足確定): %s 終値=%.1f", ss.code, bar_close)
             self._place_sell(pos, "TimeLimit", exit_price=bar_close)
             return
-        stop_price = pos.entry_price * (1.0 - self.stop_loss_pct)
+        if pos.strategy_mode == "RANGE":
+            atr_base = pos.entry_atr if pos.entry_atr > 0 else (ss.atr14 if pd.notna(ss.atr14) else 0.0)
+            if atr_base > 0:
+                stop_price = pos.entry_price - self.range_atr_stop_mult * atr_base
+                if bar_close <= stop_price:
+                    logger.info(
+                        "RangeStop(5分足確定): %s 終値=%.1f < 損切=%.1f (entry=%.1f ATR=%.2f)",
+                        ss.code, bar_close, stop_price, pos.entry_price, atr_base,
+                    )
+                    self._place_sell(pos, "RangeStop", exit_price=bar_close)
+                    return
+            if pd.notna(ss.rsi14) and ss.rsi14 >= self.range_rsi_exit:
+                logger.info("RangeRSIExit(5分足確定): %s rsi=%.1f", ss.code, ss.rsi14)
+                self._place_sell(pos, "RangeRSIExit", exit_price=bar_close)
+                return
+            hold_bars = max(0, ss.bar_count - pos.entry_bar_count)
+            if hold_bars >= self.range_max_hold_bars:
+                logger.info("RangeTimeExit(5分足確定): %s hold=%d bars", ss.code, hold_bars)
+                self._place_sell(pos, "RangeTimeExit", exit_price=bar_close)
+            return
+
+        stop_price = pos.entry_price * (1.0 - self.trend_stop_loss_pct)
         if bar_close <= stop_price:
             logger.info(
-                "StopLoss(5分足確定): %s 終値=%.1f < 損切=%.1f (entry=%.1f)",
+                "TrendStopLoss(5分足確定): %s 終値=%.1f < 損切=%.1f (entry=%.1f)",
                 ss.code, bar_close, stop_price, pos.entry_price,
             )
-            self._place_sell(pos, "StopLoss", exit_price=bar_close)
+            self._place_sell(pos, "TrendStopLoss", exit_price=bar_close)
             return
         if self._check_dead_cross(ss):
             logger.info(
@@ -692,15 +959,43 @@ class KabuTrader:
             return
         if is_entry_blocked_by_session(bar_start, JP_SESSION):
             return
-        if not self._check_golden_cross(ss):
+        if self.regime_mode == "TREND":
+            if ss.gc_signal_age != 1:
+                return
+            if bar_close <= 0:
+                return
+            ema_gap_ratio = (ss.ema5 - ss.ema15) / bar_close
+            if ema_gap_ratio < self.trend_ema_gap_min:
+                return
+            if ss.vol_ma20 <= 0 or volume < ss.vol_ma20 * self.trend_volume_mult:
+                return
+            logger.info(
+                "TREND Entry: %s %s 終値=%.1f ema_gap=%.5f vol=%.0f/ma=%.0f",
+                ss.code, ss.name, bar_close, ema_gap_ratio, volume, ss.vol_ma20,
+            )
+            self._place_buy(
+                ss,
+                entry_price=bar_close,
+                strategy_mode="TREND",
+                entry_atr=ss.atr14 if pd.notna(ss.atr14) else 0.0,
+            )
             return
-        if ss.vol_ma20 <= 0 or volume < ss.vol_ma20 * self.volume_mult:
-            return
-        logger.info(
-            "GC+出来高(5分足確定): %s %s 終値=%.1f ema5=%.1f>ema15=%.1f vol=%.0f/ma=%.0f",
-            ss.code, ss.name, bar_close, ss.ema5, ss.ema15, volume, ss.vol_ma20,
-        )
-        self._place_buy(ss, entry_price=bar_close)
+
+        if self.regime_mode == "RANGE":
+            if not pd.notna(ss.rsi14) or ss.rsi14 >= self.range_rsi_entry:
+                return
+            if not pd.notna(ss.atr14) or ss.atr14 <= 0:
+                return
+            logger.info(
+                "RANGE Entry: %s %s 終値=%.1f rsi=%.1f atr=%.2f",
+                ss.code, ss.name, bar_close, ss.rsi14, ss.atr14,
+            )
+            self._place_buy(
+                ss,
+                entry_price=bar_close,
+                strategy_mode="RANGE",
+                entry_atr=ss.atr14,
+            )
 
     # ─── シグナル判定 ──────────────────────────────────
 
@@ -712,7 +1007,14 @@ class KabuTrader:
 
     # ─── 発注ロジック ──────────────────────────────────
 
-    def _place_buy(self, ss: SymbolState, *, entry_price: float | None = None) -> bool:
+    def _place_buy(
+        self,
+        ss: SymbolState,
+        *,
+        entry_price: float | None = None,
+        strategy_mode: str = "TREND",
+        entry_atr: float = 0.0,
+    ) -> bool:
         price = entry_price if entry_price is not None and entry_price > 0 else ss.last_price
         if price <= 0:
             return False
@@ -747,13 +1049,14 @@ class KabuTrader:
 
         if self.signal_only:
             logger.info(
-                "[SIGNAL-ONLY] 買いシグナル: %s %s %d株 @%.1f (ema5=%.2f ema15=%.2f)",
-                ss.code, ss.name, qty, price, ss.ema5, ss.ema15,
+                "[SIGNAL-ONLY] 買いシグナル(%s): %s %s %d株 @%.1f",
+                strategy_mode, ss.code, ss.name, qty, price,
             )
             self._log_trade({
                 "date": self._today_str, "time": now.isoformat(),
                 "action": "BUY_SIGNAL", "symbol": ss.code, "name": ss.name,
-                "qty": qty, "price": price, "ema5": ss.ema5, "ema15": ss.ema15,
+                "qty": qty, "price": price, "strategy_mode": strategy_mode,
+                "ema5": ss.ema5, "ema15": ss.ema15, "rsi14": ss.rsi14,
             })
             return False
 
@@ -786,6 +1089,9 @@ class KabuTrader:
             entry_price=price,
             entry_time=now,
             order_id=order_id,
+            strategy_mode=strategy_mode,
+            entry_atr=max(0.0, float(entry_atr)),
+            entry_bar_count=ss.bar_count,
         )
         if self.dry_run:
             self.available_cash = max(0.0, self.available_cash - qty * price)
@@ -800,6 +1106,8 @@ class KabuTrader:
             "name": ss.name,
             "qty": qty,
             "price": price,
+            "strategy_mode": strategy_mode,
+            "entry_atr": max(0.0, float(entry_atr)),
             "order_id": order_id,
         })
         self._save_state()
@@ -810,19 +1118,21 @@ class KabuTrader:
     ) -> bool:
         sym_bare = pos.symbol.replace(".T", "")
         now = self._now()
+        order_id = ""
         ss = self.symbol_states.get(pos.symbol)
         if exit_price is None:
             exit_price = ss.last_price if ss else pos.entry_price
 
         if self.signal_only:
             logger.info(
-                "[SIGNAL-ONLY] 売りシグナル(%s): %s %s %d株 @%.1f (entry=%.1f)",
-                reason, pos.symbol, pos.name, pos.qty, exit_price, pos.entry_price,
+                "[SIGNAL-ONLY] 売りシグナル(%s/%s): %s %s %d株 @%.1f (entry=%.1f)",
+                pos.strategy_mode, reason, pos.symbol, pos.name, pos.qty, exit_price, pos.entry_price,
             )
             self._log_trade({
                 "date": self._today_str, "time": now.isoformat(),
                 "action": "SELL_SIGNAL", "reason": reason,
                 "symbol": pos.symbol, "name": pos.name,
+                "strategy_mode": pos.strategy_mode,
                 "qty": pos.qty, "entry_price": pos.entry_price,
                 "exit_price": exit_price,
             })
@@ -862,6 +1172,7 @@ class KabuTrader:
             "reason": reason,
             "symbol": pos.symbol,
             "name": pos.name,
+            "strategy_mode": pos.strategy_mode,
             "qty": pos.qty,
             # 約定照会で実約定単価に差し替えるために必要
             "order_id": order_id,
@@ -886,8 +1197,10 @@ class KabuTrader:
     def _trading_loop(self) -> None:
         logger.info(
             "=== トレーディングループ開始 === "
-            "エントリー/決済=5分足確定のみ（GC/DC/損切%.2f%%/出来高）simulation_realistic 準拠",
-            self.stop_loss_pct * 100,
+            "エントリー/決済=5分足確定のみ（RegimeSwitch=%s, TrendSL=%.2f%%, RangeRSI<%.1f）",
+            "ON" if self.enable_regime_switch else "OFF",
+            self.trend_stop_loss_pct * 100,
+            self.range_rsi_entry,
         )
         last_bar_update = time.monotonic()
 
@@ -1124,6 +1437,17 @@ class KabuTrader:
             self.max_position_value_pct * 100,
             f"¥{self.oneshot_max_yen:,.0f}" if self.oneshot_max_yen > 0 else "なし",
             f"{self.max_lot_value_yen:,.0f}",
+        )
+        logger.info(
+            "戦略設定: regime=%s trend(volume=%.2f gap>=%.4f sl=%.2f%%) range(rsi<%.1f exit>=%.1f atr_stop=%.2f hold<=%dbar)",
+            "ON" if self.enable_regime_switch else "OFF",
+            self.trend_volume_mult,
+            self.trend_ema_gap_min,
+            self.trend_stop_loss_pct * 100,
+            self.range_rsi_entry,
+            self.range_rsi_exit,
+            self.range_atr_stop_mult,
+            self.range_max_hold_bars,
         )
         if (self.dry_run or self.signal_only) and self.available_cash == 0:
             self.available_cash = 1_000_000
