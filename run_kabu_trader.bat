@@ -26,6 +26,8 @@ set "PORT_WAIT_SEC=3"
 
 set "MODE=%KABU_MODE%"
 if "%MODE%"=="" set "MODE=production"
+set "CONSOLE_LOG=%KABU_CONSOLE_LOG%"
+if "%CONSOLE_LOG%"=="" set "CONSOLE_LOG=0"
 
 echo [%date% %time%] precheck start >> "%CHECK_LOG%"
 
@@ -60,13 +62,18 @@ if errorlevel 1 (
   exit /b 5
 )
 
-echo [%date% %time%] kabu_trader start mode=%MODE% >> "%MAIN_LOG%"
+echo [%date% %time%] kabu_trader start mode=%MODE% console_log=%CONSOLE_LOG% >> "%MAIN_LOG%"
+if /I "%CONSOLE_LOG%"=="1" (
+  echo Starting kabu_trader (mode=%MODE%)...
+  echo Log file: %MAIN_LOG%
+)
+
 if /I "%MODE%"=="signal-only" (
-  "%PYTHON_EXE%" -u "%~dp0kabu_trader.py" --production --signal-only --config "%CONFIG_PATH%" >> "%MAIN_LOG%" 2>&1
+  call :run_python "--production --signal-only --config \"%CONFIG_PATH%\""
 ) else if /I "%MODE%"=="dry-run" (
-  "%PYTHON_EXE%" -u "%~dp0kabu_trader.py" --dry-run --config "%CONFIG_PATH%" >> "%MAIN_LOG%" 2>&1
+  call :run_python "--dry-run --config \"%CONFIG_PATH%\""
 ) else (
-  "%PYTHON_EXE%" -u "%~dp0kabu_trader.py" --production --config "%CONFIG_PATH%" >> "%MAIN_LOG%" 2>&1
+  call :run_python "--production --config \"%CONFIG_PATH%\""
 )
 set "EXIT_CODE=%ERRORLEVEL%"
 echo [%date% %time%] kabu_trader exit code=%EXIT_CODE% >> "%MAIN_LOG%"
@@ -87,3 +94,13 @@ echo [%date% %time%] waiting port (%TRY%/%PORT_RETRIES%) %KABU_HOST%:%KABU_PORT%
 timeout /t %PORT_WAIT_SEC% /nobreak >nul
 set /a TRY+=1
 goto :port_loop
+
+:run_python
+set "PY_ARGS=%~1"
+if /I "%CONSOLE_LOG%"=="1" (
+  powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "& { & \"%PYTHON_EXE%\" -u \"%~dp0kabu_trader.py\" %PY_ARGS% 2>&1 | Tee-Object -FilePath \"%MAIN_LOG%\" -Append; exit $LASTEXITCODE }"
+) else (
+  "%PYTHON_EXE%" -u "%~dp0kabu_trader.py" %PY_ARGS% >> "%MAIN_LOG%" 2>&1
+)
+exit /b %ERRORLEVEL%

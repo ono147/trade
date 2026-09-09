@@ -108,6 +108,15 @@ python -u kabu_trader.py --production
 run_kabu_trader_signal_only.bat
 ```
 
+コンソールへリアルタイム表示したい場合:
+
+```bat
+set KABU_CONSOLE_LOG=1
+run_kabu_trader.bat
+```
+
+`run_trade.bat` / `run_trade_signal_only.bat` は `KABU_CONSOLE_LOG=1` を既定で有効化しています。
+
 ### 3.2 日次パラメータ探索（推奨: 売買の前日〜早朝）
 
 直近約60営業日のシミュで `rank_fraction` / `volume_mult` を微調整し、ベスト値を `kabu_config.json` に書き込みます。
